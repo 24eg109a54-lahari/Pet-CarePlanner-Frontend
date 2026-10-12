@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Breed Explorer - Pet Care Planner</title>
+
+    <style>
+        :root {
+            --teal: #20b2aa;
+            --dark-teal: #168f89;
+            --mint: #dff7f4;
+            --soft-mint: #effcfb;
+            --sky: #dff2ff;
+            --lavender: #eee8ff;
+            --text: #24323d;
+            --muted: #71808c;
+            --border: #e5e9ed;
+            --shadow: 0 10px 30px rgba(30, 50, 70, 0.08);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f7fbfb;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        nav {
+            position: sticky; top: 0; z-index: 1000;
+            background: white;
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+        }
+
+        .nav-container {
+            max-width: 1250px; margin: auto; padding: 14px 20px;
+            display: flex; align-items: center; justify-content: space-between; gap: 20px;
+        }
+
+        .logo {
+            text-decoration: none; color: var(--dark-teal);
+            font-size: 22px; font-weight: 800;
+        }
+
+        .nav-links {
+            display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end;
+        }
+
+        .nav-links a {
+            text-decoration: none; color: var(--muted);
+            font-size: 13px; font-weight: 600;
+            padding: 8px 10px; border-radius: 8px;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            background: var(--soft-mint); color: var(--dark-teal);
+        }
+
+        main {
+            max-width: 1150px; margin: auto;
+            padding: 40px 20px 70px;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--mint), var(--sky), var(--lavender));
+            border-radius: 24px; padding: 45px 30px;
+            text-align: center; margin-bottom: 28px;
+            box-shadow: var(--shadow);
+        }
+
+        .hero-icon { font-size: 58px; margin-bottom: 10px; }
+        .hero h1 { font-size: 38px; margin-bottom: 10px; color: #20333d; }
+        .hero p { color: var(--muted); max-width: 700px; margin: auto; font-size: 16px; }
+
+        .search-card {
+            background: white; border: 1px solid var(--border);
+            border-radius: 18px; padding: 22px;
+            box-shadow: var(--shadow); margin-bottom: 25px;
+        }
+
+        .search-wrapper { position: relative; }
+
+        .search-icon {
+            position: absolute; left: 15px; top: 50%;
+            transform: translateY(-50%); font-size: 20px;
+        }
+
+        #searchInput {
+            width: 100%; padding: 15px 18px 15px 48px;
+            border: 2px solid var(--border); border-radius: 12px;
+            font-size: 16px; outline: none;
+        }
+
+        #searchInput:focus {
+            border-color: var(--teal);
+            box-shadow: 0 0 0 4px rgba(32, 178, 170, 0.1);
+        }
+
+        .filters {
+            display: flex; flex-wrap: wrap; gap: 9px; margin-top: 16px;
+        }
+
+        .filter-btn {
+            border: 1px solid var(--border); background: #fff;
+            color: var(--muted); padding: 9px 15px;
+            border-radius: 20px; cursor: pointer; font-weight: 700;
+        }
+
+        .filter-btn:hover { border-color: var(--teal); color: var(--dark-teal); }
+        .filter-btn.active { background: var(--teal); border-color: var(--teal); color: white; }
+
+        .result-count { margin-top: 14px; color: var(--muted); font-size: 14px; }
+
+        .breed-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .breed-card {
+            background: white; border: 1px solid var(--border);
+            border-radius: 20px; padding: 24px;
+            box-shadow: var(--shadow); transition: 0.2s;
+        }
+
+        .breed-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px rgba(30, 50, 70, 0.12);
+        }
+
+        .breed-header {
+            display: flex; align-items: center; gap: 14px; margin-bottom: 15px;
+        }
+
+        .breed-emoji {
+            width: 60px; height: 60px; border-radius: 15px;
+            background: var(--soft-mint);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 34px;
+        }
+
+        .breed-header h3 { font-size: 20px; margin-bottom: 4px; }
+        .breed-type {
+            font-size: 12px; font-weight: 700; color: var(--dark-teal);
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+
+        .breed-description {
+            color: var(--muted); font-size: 14px; margin-bottom: 16px; line-height: 1.6;
+        }
+
+        .breed-details {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px;
+        }
+
+        .detail {
+            background: #f8fafb; padding: 10px; border-radius: 10px;
+        }
+
+        .detail-label { font-size: 11px; color: var(--muted); margin-bottom: 2px; }
+        .detail-value { font-size: 13px; font-weight: 700; color: #30434e; }
+
+        .tags { display: flex; flex-wrap: wrap; gap: 7px; }
+
+        .tag {
+            background: var(--lavender); color: #6845b6;
+            padding: 5px 9px; border-radius: 20px;
+            font-size: 11px; font-weight: 700;
+        }
+
+        .empty-state {
+            display: none; background: white; border: 1px solid var(--border);
+            border-radius: 20px; padding: 45px 20px; text-align: center; color: var(--muted);
+        }
+
+        .empty-state-icon { font-size: 45px; margin-bottom: 10px; }
+        .empty-state h3 { color: var(--text); margin-bottom: 6px; }
+
+        .info-banner {
+            margin-top: 30px; background: #fff9ed;
+            border: 1px solid #f2dfb2; border-radius: 18px;
+            padding: 20px; display: flex; gap: 14px; align-items: flex-start;
+        }
+
+        .info-banner-icon { font-size: 27px; }
+        .info-banner h3 { font-size: 16px; margin-bottom: 5px; }
+        .info-banner p { color: var(--muted); font-size: 13px; }
+
+        footer {
+            text-align: center; padding: 25px 20px;
+            color: var(--muted); font-size: 13px;
+            border-top: 1px solid var(--border); background: white;
+        }
+
+        @media (max-width: 900px) {
+            .nav-container { flex-direction: column; align-items: flex-start; }
+            .nav-links { justify-content: flex-start; }
+        }
+
+        @media (max-width: 700px) {
+            main { padding: 25px 14px 50px; }
+            .hero { padding: 35px 20px; }
+            .hero h1 { font-size: 30px; }
+            .breed-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-container">
+        <a href="profile.html" class="logo">🐾 Pet Care Planner</a>
+        <div class="nav-links">
+            <a href="profile.html">Dashboard</a>
+            <a href="add-pet.html">Add Pet</a>
+            <a href="add-task.html">Tasks</a>
+            <a href="add-vaccination.html">Vaccinations</a>
+            <a href="add-reminder.html">Reminders</a>
+            <a href="add-lost-pet.html">Lost Pet</a>
+            <a href="breed-info.html" class="active">Breed Info</a>
+            <a href="health.html">Health</a>
+            <a href="care.html">Care</a>
+            <a href="medicine.html">Medicine</a>
+            <a href="ai-assistant.html">AI Assistant</a>
+        </div>
+    </div>
+</nav>
+
+<main>
+    <section class="hero">
+        <div class="hero-icon">🐶🐱🐰🐦</div>
+        <h1>Breed Explorer</h1>
+        <p>
+            Explore popular pet breeds with detailed information about temperament, size, energy level, lifespan, origin, and care needs.
+        </p>
+    </section>
+
+    <section class="search-card">
+        <div class="search-wrapper">
+            <span class="search-icon">🔎</span>
+            <input type="text" id="searchInput" placeholder="Search for a breed..." autocomplete="off">
+        </div>
+
+        <div class="filters">
+            <button class="filter-btn active" data-filter="All">All</button>
+            <button class="filter-btn" data-filter="Dog">🐶 Dogs</button>
+            <button class="filter-btn" data-filter="Cat">🐱 Cats</button>
+            <button class="filter-btn" data-filter="Rabbit">🐰 Rabbits</button>
+            <button class="filter-btn" data-filter="Bird">🐦 Birds</button>
+        </div>
+
+        <div class="result-count" id="resultCount"></div>
+    </section>
+
+    <section>
+        <div class="breed-grid" id="breedGrid"></div>
+        <div class="empty-state" id="emptyState">
+            <div class="empty-state-icon">🔍</div>
+            <h3>No breeds found</h3>
+            <p>Try another breed name or select a different category.</p>
+        </div>
+    </section>
+
+    <section class="info-banner">
+        <div class="info-banner-icon">💡</div>
+        <div>
+            <h3>Remember</h3>
+            <p>
+                Breed information is a general guide. Every individual pet has its own personality, health needs, and preferences. Always consider your pet’s unique characteristics when planning care.
+            </p>
+        </div>
+    </section>
+</main>
+
+<footer>
+    🐾 Pet Care Planner • Caring for pets, one day at a time.
+</footer>
+
+<script>
+    const breeds = [
+        // DOGS
+        {
+            name: "Golden Retriever",
+            type: "Dog",
+            emoji: "🐕",
+            origin: "Scotland",
+            size: "Large (55–75 lbs)",
+            energy: "High",
+            lifespan: "10–12 years",
+            description: "Friendly, intelligent, and devoted. Excellent family dogs that love people and other pets. Require regular exercise and grooming.",
+            tags: ["Friendly", "Family", "Intelligent", "Active", "Loyal"]
+        },
+        {
+            name: "Labrador Retriever",
+            type: "Dog",
+            emoji: "🐕",
+            origin: "Canada / Newfoundland",
+            size: "Large (55–80 lbs)",
+            energy: "Very High",
+            lifespan: "10–14 years",
+            description: "Outgoing, active, and friendly. One of the most popular breeds worldwide. Great with children and highly trainable.",
+            tags: ["Friendly", "Playful", "Trainable", "Family", "Energetic"]
+        },
+        {
+            name: "German Shepherd",
+            type: "Dog",
+            emoji: "🐕",
+            origin: "Germany",
+            size: "Large (50–90 lbs)",
+            energy: "High",
+            lifespan: "9–13 years",
+            description: "Loyal, confident, and highly intelligent. Excellent working and protection dogs. Need mental stimulation and consistent training.",
+            tags: ["Loyal", "Intelligent", "Protective", "Trainable", "Courageous"]
+        },
+        {
+            name: "Beagle",
+            type: "Dog",
+            emoji: "🐶",
+            origin: "England",
+            size: "Small–Medium (20–30 lbs)",
+            energy: "High",
+            lifespan: "12–15 years",
+            description: "Curious, merry, and friendly scent hounds. Excellent noses but can be stubborn. Need secure fencing and daily exercise.",
+            tags: ["Curious", "Playful", "Social", "Active", "Scent Hound"]
+        },
+        {
+            name: "Poodle (Standard)",
+            type: "Dog",
+            emoji: "🐩",
+            origin: "Germany / France",
+            size: "Medium–Large (40–70 lbs)",
+            energy: "High",
+            lifespan: "12–15 years",
+            description: "Highly intelligent, elegant, and active. Hypoallergenic coat that needs regular professional grooming. Excellent companions.",
+            tags: ["Intelligent", "Elegant", "Hypoallergenic", "Active", "Trainable"]
+        },
+        {
+            name: "French Bulldog",
+            type: "Dog",
+            emoji: "🐶",
+            origin: "France / England",
+            size: "Small (16–28 lbs)",
+            energy: "Low–Medium",
+            lifespan: "10–12 years",
+            description: "Affectionate, playful, and adaptable. Good apartment dogs but sensitive to heat. Watch for breathing issues common in brachycephalic breeds.",
+            tags: ["Affectionate", "Playful", "Adaptable", "Companion", "Low Exercise"]
+        },
+        {
+            name: "Siberian Husky",
+            type: "Dog",
+            emoji: "🐺",
+            origin: "Siberia",
+            size: "Medium–Large (35–60 lbs)",
+            energy: "Very High",
+            lifespan: "12–15 years",
+            description: "Energetic, independent, and pack-oriented. Built for endurance. Need lots of exercise and mental stimulation. Thick double coat.",
+            tags: ["Energetic", "Independent", "Pack-oriented", "Endurance", "Vocal"]
+        },
+
+        // CATS
+        {
+            name: "Persian",
+            type: "Cat",
+            emoji: "🐱",
+            origin: "Iran (Persia)",
+            size: "Medium (7–12 lbs)",
+            energy: "Low",
+            lifespan: "12–17 years",
+            description: "Quiet, sweet, and gentle. Famous for long luxurious coats that need daily brushing. Prefer calm indoor environments.",
+            tags: ["Calm", "Affectionate", "Quiet", "Long-haired", "Indoor"]
+        },
+        {
+            name: "Siamese",
+            type: "Cat",
+            emoji: "🐱",
+            origin: "Thailand",
+            size: "Medium (8–12 lbs)",
+            energy: "High",
+            lifespan: "15–20 years",
+            description: "Social, vocal, and highly intelligent. Form strong bonds with owners and dislike being left alone for long periods.",
+            tags: ["Social", "Vocal", "Intelligent", "Active", "Affectionate"]
+        },
+        {
+            name: "Maine Coon",
+            type: "Cat",
+            emoji: "🐈",
+            origin: "United States",
+            size: "Large (10–25 lbs)",
+            energy: "Medium",
+            lifespan: "12–15 years",
+            description: "Gentle giants with friendly personalities. Long water-resistant coats. Good with families and other pets.",
+            tags: ["Gentle", "Friendly", "Large", "Long-haired", "Sociable"]
+        },
+        {
+            name: "British Shorthair",
+            type: "Cat",
+            emoji: "🐈",
+            origin: "United Kingdom",
+            size: "Medium–Large (9–18 lbs)",
+            energy: "Low–Medium",
+            lifespan: "12–20 years",
+            description: "Calm, independent, and easy-going. Dense plush coat. Adaptable and good for quieter households.",
+            tags: ["Calm", "Independent", "Quiet", "Dense Coat", "Adaptable"]
+        },
+        {
+            name: "Ragdoll",
+            type: "Cat",
+            emoji: "🐱",
+            origin: "United States",
+            size: "Large (10–20 lbs)",
+            energy: "Low–Medium",
+            lifespan: "12–17 years",
+            description: "Docile, affectionate, and known for going limp when picked up. Soft semi-long coat. Very people-oriented.",
+            tags: ["Docile", "Affectionate", "Gentle", "People-oriented", "Relaxed"]
+        },
+        {
+            name: "Bengal",
+            type: "Cat",
+            emoji: "🐆",
+            origin: "United States",
+            size: "Medium–Large (8–15 lbs)",
+            energy: "Very High",
+            lifespan: "12–16 years",
+            description: "Active, curious, and athletic with distinctive spotted or marbled coats. Need lots of play and climbing opportunities.",
+            tags: ["Active", "Curious", "Athletic", "Spotted", "Intelligent"]
+        },
+
+        // RABBITS
+        {
+            name: "Holland Lop",
+            type: "Rabbit",
+            emoji: "🐰",
+            origin: "Netherlands",
+            size: "Small (2–4 lbs)",
+            energy: "Medium",
+            lifespan: "7–12 years",
+            description: "Friendly and gentle with distinctive floppy ears. Good for families. Need space to hop and a balanced diet of hay, pellets, and vegetables.",
+            tags: ["Friendly", "Gentle", "Small", "Floppy Ears", "Social"]
+        },
+        {
+            name: "Netherland Dwarf",
+            type: "Rabbit",
+            emoji: "🐰",
+            origin: "Netherlands",
+            size: "Very Small (1.1–2.5 lbs)",
+            energy: "Medium–High",
+            lifespan: "7–10 years",
+            description: "Tiny and energetic rabbits. Can be more reserved. Require gentle handling and plenty of space to exercise.",
+            tags: ["Tiny", "Energetic", "Alert", "Cute", "Active"]
+        },
+        {
+            name: "Mini Rex",
+            type: "Rabbit",
+            emoji: "🐰",
+            origin: "United States",
+            size: "Small–Medium (3–4.5 lbs)",
+            energy: "Medium",
+            lifespan: "7–10 years",
+            description: "Known for their incredibly soft, velvety fur. Generally calm and good-natured. Popular as pets.",
+            tags: ["Soft Fur", "Calm", "Good-natured", "Velvety", "Popular"]
+        },
+
+        // BIRDS
+        {
+            name: "Budgerigar (Budgie)",
+            type: "Bird",
+            emoji: "🐦",
+            origin: "Australia",
+            size: "Small (1–1.4 oz)",
+            energy: "High",
+            lifespan: "5–10 years",
+            description: "Small, colorful, and social parrots. Can learn to mimic sounds and words. Enjoy interaction and toys.",
+            tags: ["Social", "Intelligent", "Vocal", "Colorful", "Active"]
+        },
+        {
+            name: "Cockatiel",
+            type: "Bird",
+            emoji: "🦜",
+            origin: "Australia",
+            size: "Small–Medium (2.5–4 oz)",
+            energy: "Medium–High",
+            lifespan: "15–25 years",
+            description: "Friendly and expressive with distinctive crests. Known for whistling and affectionate personalities. Long-lived companions.",
+            tags: ["Friendly", "Vocal", "Social", "Affectionate", "Long-lived"]
+        },
+        {
+            name: "Lovebird",
+            type: "Bird",
+            emoji: "🦜",
+            origin: "Africa",
+            size: "Small (1.5–2 oz)",
+            energy: "High",
+            lifespan: "10–15 years",
+            description: "Small, colorful, and highly social. Bond strongly with mates or owners. Need daily interaction and mental stimulation.",
+            tags: ["Social", "Colorful", "Bonded", "Active", "Playful"]
+        }
+    ];
+
+    let currentFilter = "All";
+    let currentSearch = "";
+
+    const searchInput = document.getElementById("searchInput");
+    const breedGrid = document.getElementById("breedGrid");
+    const emptyState = document.getElementById("emptyState");
+    const resultCount = document.getElementById("resultCount");
+
+    function escapeHTML(value) {
+        return String(value ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+    function renderBreeds() {
+        const search = currentSearch.trim().toLowerCase();
+
+        const filtered = breeds.filter(breed => {
+            const matchesFilter = currentFilter === "All" || breed.type === currentFilter;
+            const searchable = [
+                breed.name, breed.type, breed.origin, breed.size,
+                breed.energy, breed.description, ...(breed.tags || [])
+            ].join(" ").toLowerCase();
+            const matchesSearch = !search || searchable.includes(search);
+            return matchesFilter && matchesSearch;
+        });
+
+        breedGrid.innerHTML = "";
+        resultCount.textContent = `${filtered.length} ${filtered.length === 1 ? "breed" : "breeds"} found`;
+
+        if (filtered.length === 0) {
+            emptyState.style.display = "block";
+            return;
+        }
+
+        emptyState.style.display = "none";
+
+        filtered.forEach(breed => {
+            const card = document.createElement("article");
+            card.className = "breed-card";
+            card.innerHTML = `
+                <div class="breed-header">
+                    <div class="breed-emoji">${escapeHTML(breed.emoji)}</div>
+                    <div>
+                        <h3>${escapeHTML(breed.name)}</h3>
+                        <div class="breed-type">${escapeHTML(breed.type)}</div>
+                    </div>
+                </div>
+                <p class="breed-description">${escapeHTML(breed.description)}</p>
+                <div class="breed-details">
+                    <div class="detail">
+                        <div class="detail-label">Origin</div>
+                        <div class="detail-value">${escapeHTML(breed.origin)}</div>
+                    </div>
+                    <div class="detail">
+                        <div class="detail-label">Size</div>
+                        <div class="detail-value">${escapeHTML(breed.size)}</div>
+                    </div>
+                    <div class="detail">
+                        <div class="detail-label">Energy</div>
+                        <div class="detail-value">${escapeHTML(breed.energy)}</div>
+                    </div>
+                    <div class="detail">
+                        <div class="detail-label">Lifespan</div>
+                        <div class="detail-value">${escapeHTML(breed.lifespan)}</div>
+                    </div>
+                </div>
+                <div class="tags">
+                    ${(breed.tags || []).map(tag => `<span class="tag">${escapeHTML(tag)}</span>`).join("")}
+                </div>
+            `;
+            breedGrid.appendChild(card);
+        });
+    }
+
+    searchInput.addEventListener("input", function () {
+        currentSearch = this.value;
+        renderBreeds();
+    });
+
+    document.querySelectorAll(".filter-btn").forEach(button => {
+        button.addEventListener("click", function () {
+            document.querySelectorAll(".filter-btn").forEach(btn => btn.classList.remove("active"));
+            this.classList.add("active");
+            currentFilter = this.dataset.filter;
+            renderBreeds();
+        });
+    });
+
+    renderBreeds();
+</script>
+
+</body>
+</html>

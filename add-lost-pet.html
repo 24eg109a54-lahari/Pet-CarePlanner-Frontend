@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Report Lost Pet | Pet Care Planner</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --teal: #159a9c;
+      --dark-teal: #087f82;
+      --mint: #dff7f0;
+      --soft-mint: #effcf8;
+      --sky: #dff1ff;
+      --text: #243746;
+      --muted: #6d7f8c;
+      --border: #dce9e8;
+      --danger: #d95c70;
+      --soft-danger: #fff0f3;
+      --shadow: 0 14px 40px rgba(35, 93, 103, 0.10);
+    }
+
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f9fffd, #f7fbff 55%, #fbf9ff);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(220,233,232,0.9);
+      padding: 15px 6%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 25px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--dark-teal);
+      text-decoration: none;
+      font-size: 21px;
+      font-weight: 800;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--mint), var(--sky));
+      font-size: 22px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 9px 12px;
+      border-radius: 12px;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--dark-teal);
+      background: var(--soft-mint);
+    }
+
+    main {
+      width: min(1050px, 92%);
+      margin: 0 auto;
+      padding: 40px 0 70px;
+    }
+
+    .hero {
+      background: linear-gradient(
+        135deg,
+        rgba(223,247,240,0.95),
+        rgba(223,241,255,0.95) 55%,
+        rgba(238,232,255,0.95)
+      );
+      border: 1px solid rgba(200,226,226,0.8);
+      border-radius: 28px;
+      padding: 35px 40px;
+      margin-bottom: 25px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero h1 {
+      font-size: 34px;
+      color: #214650;
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      color: #54717a;
+      font-size: 15px;
+      line-height: 1.6;
+      max-width: 650px;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.8fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    .form-card,
+    .info-card {
+      background: rgba(255,255,255,0.95);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+    }
+
+    .card-heading {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .heading-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--soft-danger);
+      font-size: 24px;
+    }
+
+    .card-heading h2 {
+      font-size: 20px;
+      color: #29444d;
+      margin-bottom: 4px;
+    }
+
+    .card-heading p {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: #39535c;
+      margin-bottom: 7px;
+    }
+
+    .required {
+      color: var(--danger);
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid #d7e5e4;
+      background: #fbfefd;
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-family: inherit;
+      font-size: 14px;
+      color: var(--text);
+      outline: none;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--teal);
+      box-shadow: 0 0 0 4px rgba(21,154,156,0.09);
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    .field-help {
+      margin-top: 5px;
+      color: #8a9ba2;
+      font-size: 11px;
+    }
+
+    .submit-button {
+      width: 100%;
+      border: none;
+      border-radius: 14px;
+      padding: 14px 18px;
+      background: linear-gradient(135deg, var(--teal), #3aaeb0);
+      color: white;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 9px 22px rgba(21,154,156,0.22);
+    }
+
+    .submit-button:hover {
+      transform: translateY(-1px);
+    }
+
+    .side-column {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .info-card h3 {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 16px;
+      color: #294a53;
+      margin-bottom: 12px;
+    }
+
+    .info-card p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .helpline-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 13px;
+      border-radius: 12px;
+      background: var(--soft-mint);
+      margin-bottom: 10px;
+    }
+
+    .helpline-item strong {
+      display: block;
+      font-size: 13px;
+      color: #38545d;
+      margin-bottom: 3px;
+    }
+
+    .helpline-item span {
+      display: block;
+      font-size: 11px;
+      color: #73868d;
+      margin-top: 2px;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .call-btn {
+      background: var(--teal);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .call-btn:hover {
+      background: var(--dark-teal);
+    }
+
+    .map-btn {
+      background: #3b82c4;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .map-btn:hover {
+      background: #286da7;
+    }
+
+    .success-message {
+      display: none;
+      margin-bottom: 18px;
+      padding: 13px 15px;
+      border-radius: 12px;
+      background: var(--soft-mint);
+      border: 1px solid #bde8dc;
+      color: #26756d;
+      font-size: 13px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .success-message.show {
+      display: block;
+    }
+
+    footer {
+      text-align: center;
+      padding: 0 20px 30px;
+      color: #8da0a7;
+      font-size: 12px;
+    }
+
+    @media (max-width: 850px) {
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .nav-links {
+        display: none;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .helpline-item {
+        align-items: flex-start;
+      }
+
+      .button-group {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav>
+
+    <a href="profile.html" class="logo">
+      <span class="logo-icon">🐾</span>
+      Pet Care Planner
+    </a>
+
+    <div class="nav-links">
+      <a href="profile.html">Dashboard</a>
+      <a href="add-pet.html">Pets</a>
+      <a href="add-task.html">Tasks</a>
+      <a href="add-vaccination.html">Vaccinations</a>
+      <a href="add-reminder.html">Reminders</a>
+      <a href="add-lost-pet.html" class="active">Lost Pet</a>
+      <a href="breed-info.html">Breed Info</a>
+      <a href="health.html">Health</a>
+      <a href="care.html">Care</a>
+      <a href="medicine.html">Medicine</a>
+      <a href="ai-assistant.html">AI Assistant</a>
+    </div>
+
+  </nav>
+
+
+  <main>
+
+    <!-- Hero -->
+    <section class="hero">
+
+      <div>
+        <h1>Report a Lost Pet</h1>
+
+        <p>
+          Create a clear lost-pet report with the details people need
+          to recognize your companion. You can also quickly contact
+          animal rescue organizations in Hyderabad.
+        </p>
+      </div>
+
+    </section>
+
+
+    <div class="content-grid">
+
+
+      <!-- Lost Pet Form -->
+      <section class="form-card">
+
+        <div class="card-heading">
+
+          <div class="heading-icon">💗</div>
+
+          <div>
+            <h2>Tell us about your pet</h2>
+
+            <p>
+              The more accurate the information, the easier it is
+              for someone to identify your pet.
+            </p>
+          </div>
+
+        </div>
+
+
+        <div id="successMessage" class="success-message">
+          🐾 Lost pet report saved successfully.
+          Taking you to your dashboard...
+        </div>
+
+
+        <form id="lostPetForm">
+
+          <!-- Pet Name -->
+          <div class="form-group">
+
+            <label for="petName">
+              Pet Name <span class="required">*</span>
+            </label>
+
+            <input
+              type="text"
+              id="petName"
+              placeholder="e.g. Bruno"
+              required
+            >
+
+          </div>
+
+
+          <!-- Pet Type + Breed -->
+          <div class="form-row">
+
+            <div class="form-group">
+
+              <label for="petType">
+                Pet Type <span class="required">*</span>
+              </label>
+
+              <select id="petType" required>
+
+                <option value="">
+                  Select pet type
+                </option>
+
+                <option value="Dog">
+                  🐶 Dog
+                </option>
+
+                <option value="Cat">
+                  🐱 Cat
+                </option>
+
+                <option value="Rabbit">
+                  🐰 Rabbit
+                </option>
+
+                <option value="Bird">
+                  🐦 Bird
+                </option>
+
+                <option value="Other">
+                  🐾 Other
+                </option>
+
+              </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="breed">
+                Breed
+              </label>
+
+              <input
+                type="text"
+                id="breed"
+                placeholder="e.g. Golden Retriever"
+              >
+
+            </div>
+
+          </div>
+
+
+          <!-- Location + Date -->
+          <div class="form-row">
+
+            <div class="form-group">
+
+              <label for="location">
+                Last Seen Location
+                <span class="required">*</span>
+              </label>
+
+              <input
+                type="text"
+                id="location"
+                placeholder="e.g. Near Green Park, Hyderabad"
+                required
+              >
+
+              <div class="field-help">
+                Include a landmark or neighborhood if possible.
+              </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="date">
+                Date Last Seen
+                <span class="required">*</span>
+              </label>
+
+              <input
+                type="date"
+                id="date"
+                required
+              >
+
+            </div>
+
+          </div>
+
+
+          <!-- Contact -->
+          <div class="form-group">
+
+            <label for="contact">
+              Your Contact Number
+              <span class="required">*</span>
+            </label>
+
+            <input
+              type="tel"
+              id="contact"
+              placeholder="e.g. 9876543210"
+              required
+            >
+
+            <div class="field-help">
+              This number will be shown so people can contact you.
+            </div>
+
+          </div>
+
+
+          <!-- Details -->
+          <div class="form-group">
+
+            <label for="details">
+              Additional Details
+            </label>
+
+            <textarea
+              id="details"
+              placeholder="Color, collar, markings, personality, or any other identifying details..."
+            ></textarea>
+
+          </div>
+
+
+          <!-- GPS Location -->
+          <div class="form-group">
+
+            <label>
+              Map Location (optional)
+            </label>
+
+            <button
+              type="button"
+              id="locationButton"
+              class="submit-button"
+              style="background:#3b82c4;"
+            >
+              📍 Use Current Location
+            </button>
+
+            <div id="locationStatus" class="field-help">
+              Click only if you want to save approximate GPS
+              coordinates with this report.
+            </div>
+
+          </div>
+
+
+          <!-- Submit -->
+          <button
+            type="submit"
+            class="submit-button"
+          >
+            🐾 Publish Lost Pet Report
+          </button>
+
+        </form>
+
+      </section>
+
+
+
+      <!-- RIGHT SIDE -->
+      <aside class="side-column">
+
+
+        <!-- ============================= -->
+        <!-- HYDERABAD RESCUE CENTERS -->
+        <!-- ============================= -->
+
+        <div class="info-card">
+
+          <h3>
+            📞 Hyderabad Animal Rescue
+          </h3>
+
+          <p style="margin-bottom:14px;">
+            Contact a nearby animal rescue organization
+            if you find an injured, sick, abandoned, or lost animal.
+          </p>
+
+
+          <!-- AWCS -->
+          <div class="helpline-item">
+
+            <div>
+              <strong>
+                Animal Warriors Conservation Society
+              </strong>
+
+              <span>
+                📍 Ameenpur, Hyderabad - 502032
+              </span>
+
+              <span>
+                📞 9697887888
+              </span>
+            </div>
+
+            <div class="button-group">
+
+              <a
+                href="tel:+919697887888"
+                class="call-btn"
+              >
+                📞 Call
+              </a>
+
+              <a
+                href="https://www.google.com/maps/search/?api=1&query=Animal+Warriors+Conservation+Society+Ameenpur+Hyderabad"
+                target="_blank"
+                class="map-btn"
+              >
+                📍 Map
+              </a>
+
+            </div>
+
+          </div>
+
+
+          <!-- PEOPLE FOR ANIMALS -->
+          <div class="helpline-item">
+
+            <div>
+              <strong>
+                People For Animals - Hyderabad
+              </strong>
+
+              <span>
+                📍 Emergency Rescue Home,
+                Begum Bazar, Hyderabad - 500012
+              </span>
+
+              <span>
+                📞 7337450643
+              </span>
+
+              <span>
+                24-hour sick/injured animal reporting
+              </span>
+            </div>
+
+            <div class="button-group">
+
+              <a
+                href="tel:+917337450643"
+                class="call-btn"
+              >
+                📞 Call
+              </a>
+
+              <a
+                href="https://www.google.com/maps/search/?api=1&query=People+For+Animals+Emergency+Rescue+Home+Begum+Bazar+Hyderabad"
+                target="_blank"
+                class="map-btn"
+              >
+                📍 Map
+              </a>
+
+            </div>
+
+          </div>
+
+
+          <!-- BLUE CROSS -->
+          <div class="helpline-item">
+
+            <div>
+              <strong>
+                Blue Cross of Hyderabad
+              </strong>
+
+              <span>
+                📍 403/9, Road 35, Jubilee Hills,
+                Hyderabad - 500033
+              </span>
+
+              <span>
+                📞 8886676074
+              </span>
+
+              <span>
+                Shelter hours: 10 AM - 1 PM,
+                2 PM - 5 PM
+              </span>
+            </div>
+
+            <div class="button-group">
+
+              <a
+                href="tel:+918886676074"
+                class="call-btn"
+              >
+                📞 Call
+              </a>
+
+              <a
+                href="https://www.google.com/maps/search/?api=1&query=Blue+Cross+Animal+Shelter+403%2F9+Road+35+Jubilee+Hills+Hyderabad"
+                target="_blank"
+                class="map-btn"
+              >
+                📍 Map
+              </a>
+
+            </div>
+
+          </div>
+
+
+          <!-- AASRA -->
+          <div class="helpline-item">
+
+            <div>
+              <strong>
+                AASRA
+              </strong>
+
+              <span>
+                📍 Bowrampet, Hyderabad - 500043
+              </span>
+
+              <span>
+                📞 7893993955
+              </span>
+            </div>
+
+            <div class="button-group">
+
+              <a
+                href="tel:+917893993955"
+                class="call-btn"
+              >
+                📞 Call
+              </a>
+
+              <a
+                href="https://www.google.com/maps/search/?api=1&query=AASRA+Animal+Rescue+Bowrampet+Hyderabad"
+                target="_blank"
+                class="map-btn"
+              >
+                📍 Map
+              </a>
+
+            </div>
+
+          </div>
+
+
+          <!-- BREATH ANIMAL RESCUE -->
+          <div class="helpline-item">
+
+            <div>
+              <strong>
+                Breath Animal Rescue Home
+              </strong>
+
+              <span>
+                📍 Bowrampet, Dundigal,
+                Hyderabad - 500043
+              </span>
+            </div>
+
+            <a
+              href="https://www.google.com/maps/search/?api=1&query=Breath+Animal+Rescue+Home+Bowrampet+Dundigal+Hyderabad"
+              target="_blank"
+              class="map-btn"
+            >
+              📍 Map
+            </a>
+
+          </div>
+
+
+          <!-- JEEVA VAATSALYA -->
+          <div class="helpline-item">
+
+            <div>
+              <strong>
+                Jeeva Vaatsalya Rescue & Rehabilitation Centre
+              </strong>
+
+              <span>
+                📍 Bachupally, Hyderabad - 500090
+              </span>
+            </div>
+
+            <a
+              href="https://www.google.com/maps/search/?api=1&query=Jeeva+Vaatsalya+Rescue+and+Rehabilitation+Centre+Bachupally+Hyderabad"
+              target="_blank"
+              class="map-btn"
+            >
+              📍 Map
+            </a>
+
+          </div>
+
+
+          <p class="field-help" style="margin-top:12px;">
+            ⚠️ Rescue availability can change. Call before
+            visiting a center.
+          </p>
+
+        </div>
+
+
+
+        <!-- Helpful Tips -->
+        <div class="info-card">
+
+          <h3>
+            🔎 Helpful Tips
+          </h3>
+
+          <p>
+            • Be specific with the last seen location<br>
+            • Mention collar, color, and unique markings<br>
+            • Share the report with neighbors and local groups<br>
+            • Keep your phone nearby<br>
+            • Contact a rescue organization if the animal is injured
+          </p>
+
+        </div>
+
+
+
+        <!-- What happens next -->
+        <div class="info-card">
+
+          <h3>
+            📋 What happens next?
+          </h3>
+
+          <p>
+            Your report will appear on the Dashboard.
+            From there you can share it, mark the pet as found,
+            or delete the report.
+          </p>
+
+        </div>
+
+      </aside>
+
+    </div>
+
+  </main>
+
+
+  <footer>
+    Made with 🐾 for happier, healthier pets.
+  </footer>
+
+
+
+  <script>
+
+    /* =========================================
+       GET SAVED LOST PETS
+    ========================================= */
+
+    function getLostPets() {
+
+      try {
+
+        return JSON.parse(
+          localStorage.getItem("lostPets")
+        ) || [];
+
+      } catch {
+
+        return [];
+
+      }
+
+    }
+
+
+    /* =========================================
+       DEFAULT DATE
+    ========================================= */
+
+    document.getElementById("date").value =
+      new Date().toISOString().split("T")[0];
+
+
+    /* =========================================
+       GPS LOCATION
+    ========================================= */
+
+    let latitude = null;
+    let longitude = null;
+
+    const locationButton =
+      document.getElementById("locationButton");
+
+    const locationStatus =
+      document.getElementById("locationStatus");
+
+
+    locationButton.addEventListener(
+      "click",
+      function () {
+
+        if (!navigator.geolocation) {
+
+          locationStatus.textContent =
+            "Location services are not supported by this browser.";
+
+          return;
+        }
+
+
+        locationButton.disabled = true;
+
+        locationButton.textContent =
+          "📍 Getting location...";
+
+        locationStatus.textContent =
+          "Please allow location access if asked.";
+
+
+        navigator.geolocation.getCurrentPosition(
+
+          function (position) {
+
+            latitude =
+              Number(
+                position.coords.latitude.toFixed(6)
+              );
+
+            longitude =
+              Number(
+                position.coords.longitude.toFixed(6)
+              );
+
+
+            locationButton.disabled = false;
+
+            locationButton.textContent =
+              "✓ Location Captured";
+
+
+            locationStatus.innerHTML = `
+              Saved coordinates:
+              ${latitude}, ${longitude}
+              <br>
+
+              <a
+                class="map-btn"
+                href="https://www.google.com/maps?q=${latitude},${longitude}"
+                target="_blank"
+              >
+                📍 Open in Google Maps
+              </a>
+            `;
+
+          },
+
+
+          function (error) {
+
+            locationButton.disabled = false;
+
+            locationButton.textContent =
+              "📍 Use Current Location";
+
+
+            if (error.code === 1) {
+
+              locationStatus.textContent =
+                "Location permission denied. You can continue without map location.";
+
+            } else {
+
+              locationStatus.textContent =
+                "Could not get location. You can continue without it.";
+
+            }
+
+          },
+
+
+          {
+            enableHighAccuracy: true,
+            timeout: 10000
+          }
+
+        );
+
+      }
+    );
+
+
+
+    /* =========================================
+       SAVE LOST PET REPORT
+    ========================================= */
+
+    document
+      .getElementById("lostPetForm")
+      .addEventListener(
+        "submit",
+        function (e) {
+
+          e.preventDefault();
+
+
+          const lostPet = {
+
+            id: Date.now(),
+
+            petName:
+              document
+                .getElementById("petName")
+                .value
+                .trim(),
+
+            petType:
+              document
+                .getElementById("petType")
+                .value,
+
+            breed:
+              document
+                .getElementById("breed")
+                .value
+                .trim(),
+
+            location:
+              document
+                .getElementById("location")
+                .value
+                .trim(),
+
+            latitude:
+              latitude,
+
+            longitude:
+              longitude,
+
+            date:
+              document
+                .getElementById("date")
+                .value,
+
+            contact:
+              document
+                .getElementById("contact")
+                .value
+                .trim(),
+
+            details:
+              document
+                .getElementById("details")
+                .value
+                .trim(),
+
+            status:
+              "Missing",
+
+            createdAt:
+              new Date().toISOString()
+
+          };
+
+
+          const lostPets =
+            getLostPets();
+
+
+          lostPets.push(lostPet);
+
+
+          localStorage.setItem(
+            "lostPets",
+            JSON.stringify(lostPets)
+          );
+
+
+          const successMessage =
+            document.getElementById(
+              "successMessage"
+            );
+
+
+          successMessage.classList.add(
+            "show"
+          );
+
+
+          this
+            .querySelector(
+              "button[type='submit']"
+            )
+            .disabled = true;
+
+
+          setTimeout(
+            () => {
+
+              window.location.href =
+                "profile.html";
+
+            },
+            1200
+          );
+
+        }
+      );
+
+  </script>
+
+</body>
+
+</html>

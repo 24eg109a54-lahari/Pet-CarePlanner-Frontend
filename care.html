@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pet Care Guide - Pet Care Planner</title>
+  <style>
+    :root {
+      --teal: #4fa6a8;
+      --dark-teal: #28777a;
+      --mint: #bfe8df;
+      --soft-mint: #eaf8f5;
+      --text: #304b53;
+      --muted: #7b8d92;
+      --border: #dce9e8;
+      --shadow: 0 10px 28px rgba(35, 93, 103, 0.08);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(135deg, #f4fbfa, #eef9fb, #faf7fd);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    a { text-decoration: none; color: inherit; }
+    .navbar {
+      position: sticky; top: 0; z-index: 1000;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-container {
+      max-width: 1250px; margin: auto; padding: 15px 20px;
+      display: flex; align-items: center; justify-content: space-between; gap: 20px;
+    }
+    .logo { color: var(--dark-teal); font-size: 19px; font-weight: 900; }
+    .nav-links { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; }
+    .nav-links a {
+      padding: 8px 10px; border-radius: 10px;
+      color: var(--muted); font-size: 11px; font-weight: 700;
+    }
+    .nav-links a:hover, .nav-links a.active {
+      background: var(--soft-mint); color: var(--dark-teal);
+    }
+    .logout-btn {
+      background: #f1f5f9; border: none; padding: 8px 14px;
+      border-radius: 10px; cursor: pointer; font-weight: 700;
+      color: #475569; font-size: 12px;
+    }
+    .container {
+      width: min(1050px, calc(100% - 30px));
+      margin: auto; padding: 35px 0 60px;
+    }
+    h1 { font-size: 28px; color: #284b53; margin-bottom: 8px; }
+    .subtitle { color: var(--muted); font-size: 15px; margin-bottom: 35px; }
+    .section-title {
+      font-size: 22px; color: var(--dark-teal);
+      margin: 45px 0 18px; padding-bottom: 8px;
+      border-bottom: 2px solid var(--mint);
+    }
+    .detail-card {
+      background: white; border: 1px solid var(--border);
+      border-radius: 18px; padding: 22px; margin-bottom: 16px;
+      box-shadow: var(--shadow);
+    }
+    .detail-card h3 { font-size: 17px; color: var(--dark-teal); margin-bottom: 10px; }
+    .detail-card p { color: #4a5f66; font-size: 14px; line-height: 1.65; margin-bottom: 6px; }
+    .tips-section {
+      margin-top: 45px; background: white;
+      border: 1px solid var(--border); border-radius: 20px;
+      padding: 28px; box-shadow: var(--shadow);
+    }
+    .tips-section h2 { font-size: 20px; color: #2d4e56; margin-bottom: 18px; }
+    .tip-item { display: flex; gap: 12px; margin-bottom: 14px; align-items: flex-start; }
+    .tip-item .bullet {
+      background: var(--soft-mint); color: var(--dark-teal);
+      width: 26px; height: 26px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 800; flex-shrink: 0;
+    }
+    .tip-item p { color: #4a5f66; font-size: 14.5px; line-height: 1.55; }
+    @media (max-width: 700px) {
+      .nav-container { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="profile.html" class="logo">🐾 Pet Care Planner</a>
+    <div class="nav-links">
+      <a href="profile.html">Dashboard</a>
+      <a href="add-pet.html">Add Pet</a>
+      <a href="add-task.html">Tasks</a>
+      <a href="add-vaccination.html">Vaccinations</a>
+      <a href="add-reminder.html">Reminders</a>
+      <a href="add-lost-pet.html">Lost Pet</a>
+      <a href="breed-info.html">Breed Info</a>
+      <a href="health.html">Health</a>
+      <a href="care.html" class="active">Care</a>
+      <a href="medicine.html">Medicine</a>
+      <a href="ai-assistant.html">AI Assistant</a>
+    </div>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+</nav>
+
+<div class="container">
+  <h1>Pet Care Guide 🧼</h1>
+  <p class="subtitle">Detailed everyday care for Dogs, Cats, Rabbits, and Birds — feeding, housing, grooming, exercise, and mental well-being.</p>
+
+  <!-- GENERAL -->
+  <h2 class="section-title">General Care (All Pets)</h2>
+  <div class="detail-card">
+    <h3>Feeding Basics</h3>
+    <p>Choose species-appropriate, high-quality food. Feed measured portions at regular times. Always provide fresh water. Never give chocolate, grapes, onions, garlic, xylitol, or avocado (toxic to birds).</p>
+  </div>
+  <div class="detail-card">
+    <h3>Safe Environment</h3>
+    <p>Keep cleaning products, medicines, toxic plants, and small objects out of reach. Provide a quiet resting place. Secure windows and balconies.</p>
+  </div>
+
+  <!-- DOGS -->
+  <h2 class="section-title">🐶 Dog Care</h2>
+  <div class="detail-card">
+    <h3>Feeding</h3>
+    <p>Complete dog food according to age and size. Most adults do well with two meals daily. Measure food to prevent obesity. Fresh water always available.</p>
+  </div>
+  <div class="detail-card">
+    <h3>Exercise & Mental Stimulation</h3>
+    <p>30–90 minutes of activity daily depending on breed. Combine walks with play and training. Puzzle toys and obedience work tire the mind as well as the body.</p>
+  </div>
+  <div class="detail-card">
+    <h3>Grooming</h3>
+    <p>Brush according to coat type. Bathe only when needed with dog-safe shampoo. Check ears, trim nails, and brush teeth regularly.</p>
+  </div>
+  <div class="detail-card">
+    <h3>Training & Socialization</h3>
+    <p>Start basic training early using positive reinforcement. Socialize puppies carefully with people, places, and other dogs.</p>
+  </div>
+
+  <!-- CATS -->
+  <h2 class="section-title">🐱 Cat Care</h2>
+  <div class="detail-card">
+    <h3>Feeding</h3>
+    <p>Cats are obligate carnivores. High-quality wet + dry food works well for many. Measured meals prevent obesity. Some cats prefer running water.</p>
+  </div>
+  <div class="detail-card">
+    <h3>Litter Box</h3>
+    <p>One box per cat + one extra. Scoop daily. Most cats prefer unscented clumping litter in a quiet location.</p>
+  </div>
+  <div class="detail-card">
+    <h3>Enrichment</h3>
+    <p>Vertical space (cat trees), daily interactive play, scratching posts, and puzzle feeders prevent boredom and behavior problems.</p>
+  </div>
+  <div class="detail-card">
+    <h3>Grooming</h3>
+    <p>Weekly brushing for short hair, daily for long hair. Most cats rarely need baths. Check ears and nails as needed.</p>
+  </div>
+
+  <!-- RABBITS -->
+  <h2 class="section-title">🐰 Rabbit Care</h2>
+  <div class="detail-card">
+    <h3>Diet (Critical)</h3>
+    <p>Unlimited grass hay (timothy/orchard) should be the majority of the diet. Small amount of pellets + daily leafy greens. Limit fruits and sugary treats.</p>
+  </div>
+  <div class="detail-card">
+    <h3>Housing & Exercise</h3>
+    <p>Large pen or rabbit-proofed room is better than a small cage. Several hours of supervised free-roam time daily. Provide tunnels and hiding places.</p>
+  </div>
+  <div class="detail-card">
+    <h3>Grooming & Health</h3>
+    <p>Brush regularly, especially during shedding. Never bathe unless advised by a vet. Check teeth — overgrown teeth are painful and common.</p>
+  </div>
+
+  <!-- BIRDS -->
+  <h2 class="section-title">🐦 Bird Care</h2>
+  <div class="detail-card">
+    <h3>Diet</h3>
+    <p>High-quality pellets + fresh vegetables + limited seeds/fruits. Seeds alone are not balanced. Avoid avocado, chocolate, caffeine, and high-salt foods.</p>
+  </div>
+  <div class="detail-card">
+    <h3>Housing</h3>
+    <p>Largest practical cage with horizontal bars. Different perch sizes and materials. Place in a social area away from drafts and kitchen fumes.</p>
+  </div>
+  <div class="detail-card">
+    <h3>Social Needs & Enrichment</h3>
+    <p>Most pet birds need daily interaction. Provide foraging and chewing toys. Rotate toys. Supervised out-of-cage time is beneficial.</p>
+  </div>
+  <div class="detail-card">
+    <h3>Health Monitoring</h3>
+    <p>Watch droppings, appetite, feather condition, and activity. Birds hide illness — early veterinary care is important.</p>
+  </div>
+
+  <div class="tips-section">
+    <h2>Everyday Care Tips for All Pets</h2>
+    <div class="tip-item"><div class="bullet">1</div><p>Establish a consistent daily routine — pets feel more secure with predictability.</p></div>
+    <div class="tip-item"><div class="bullet">2</div><p>Check body, eyes, ears, mouth, and skin at least once a week.</p></div>
+    <div class="tip-item"><div class="bullet">3</div><p>Reward good behavior with praise or healthy treats instead of punishment.</p></div>
+    <div class="tip-item"><div class="bullet">4</div><p>Keep a basic pet first-aid kit and the number of the nearest emergency vet.</p></div>
+    <div class="tip-item"><div class="bullet">5</div><p>Introduce new foods, people, or environments gradually.</p></div>
+    <div class="tip-item"><div class="bullet">6</div><p>Spend quality time with your pet every day.</p></div>
+  </div>
+</div>
+
+<script>
+  function logout() {
+    localStorage.removeItem("loggedIn");
+    localStorage.removeItem("userName");
+    localStorage.removeItem("userEmail");
+    window.location.href = "/";
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Add Pet - Pet Care Planner</title>
+
+    <style>
+
+        :root {
+            --teal: #4fa6a8;
+            --dark-teal: #28777a;
+            --mint: #bfe8df;
+            --soft-mint: #eaf8f5;
+            --sky: #d8eff4;
+            --blue: #6caec4;
+            --lavender: #e8def5;
+            --purple: #8668a9;
+            --cream: #fffaf0;
+            --white: #ffffff;
+            --text: #304b53;
+            --muted: #7b8d92;
+            --border: #dce9e8;
+            --danger: #d66b6b;
+            --shadow:
+                0 10px 28px rgba(35, 93, 103, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f8fffd,
+                    #eef9fb
+                );
+
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: white;
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .logo {
+            text-decoration: none;
+            color: var(--dark-teal);
+            font-size: 20px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 7px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text);
+            font-size: 12px;
+            font-weight: 700;
+            padding: 8px 10px;
+            border-radius: 10px;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: var(--soft-mint);
+            color: var(--dark-teal);
+        }
+
+        .container {
+            width: min(850px, 92%);
+            margin: 45px auto;
+        }
+
+        .hero {
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--mint),
+                    var(--sky),
+                    var(--lavender)
+                );
+
+            border-radius: 30px;
+            padding: 42px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow);
+        }
+
+        .hero h1 {
+            color: var(--dark-teal);
+            margin-bottom: 10px;
+            font-size: 34px;
+        }
+
+        .hero p {
+            color: #587177;
+            line-height: 1.7;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 25px;
+            padding: 32px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 800;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            padding: 13px;
+            font-family: inherit;
+            font-size: 14px;
+            color: var(--text);
+            background: white;
+            outline: none;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: var(--teal);
+            box-shadow:
+                0 0 0 3px
+                rgba(79, 166, 168, 0.12);
+        }
+
+        textarea {
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        .required {
+            color: var(--danger);
+        }
+
+        .buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        button,
+        .cancel-button {
+            border: none;
+            border-radius: 12px;
+            padding: 13px 20px;
+            font-family: inherit;
+            font-weight: 800;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        .save-button {
+            background: var(--teal);
+            color: white;
+        }
+
+        .save-button:hover {
+            background: var(--dark-teal);
+        }
+
+        .cancel-button {
+            background: #f0f4f4;
+            color: var(--text);
+        }
+
+        .message {
+            display: none;
+            background: var(--soft-mint);
+            color: var(--dark-teal);
+            padding: 13px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        @media (max-width: 700px) {
+
+            .navbar {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .container {
+                margin: 25px auto;
+            }
+
+            .hero,
+            .form-card {
+                padding: 25px;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <a href="profile.html" class="logo">
+        🐾 Pet Care Planner
+    </a>
+
+    <div class="nav-links">
+
+        <a href="profile.html">
+            Dashboard
+        </a>
+
+        <a href="add-pet.html" class="active">
+            Add Pet
+        </a>
+
+        <a href="add-task.html">
+            Tasks
+        </a>
+
+        <a href="add-vaccination.html">
+            Vaccinations
+        </a>
+
+        <a href="add-reminder.html">
+            Reminders
+        </a>
+
+        <a href="add-lost-pet.html">
+            Lost Pet
+        </a>
+
+        <a href="breed-info.html">
+            Breed Info
+        </a>
+
+        <a href="health.html">
+            Health
+        </a>
+
+        <a href="care.html">
+            Care
+        </a>
+
+        <a href="medicine.html">
+            Medicine
+        </a>
+
+        <a href="ai-assistant.html">
+            AI Assistant
+        </a>
+
+    </div>
+
+</nav>
+
+
+<main class="container">
+
+    <section class="hero">
+
+        <h1>
+            Add Your Pet 🐾
+        </h1>
+
+        <p>
+            Add your pet's basic information so you can
+            manage their care, health, medicine and reminders.
+        </p>
+
+    </section>
+
+
+    <section class="form-card">
+
+        <div id="message" class="message">
+            Pet saved successfully!
+        </div>
+
+        <form id="petForm">
+
+            <div class="form-group">
+
+                <label for="petName">
+                    Pet Name <span class="required">*</span>
+                </label>
+
+                <input
+                    type="text"
+                    id="petName"
+                    required
+                    placeholder="e.g. Bruno"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="petType">
+                    Pet Type <span class="required">*</span>
+                </label>
+
+                <select id="petType" required>
+
+                    <option value="">
+                        Select pet type
+                    </option>
+
+                    <option value="Dog">
+                        🐶 Dog
+                    </option>
+
+                    <option value="Cat">
+                        🐱 Cat
+                    </option>
+
+                    <option value="Rabbit">
+                        🐰 Rabbit
+                    </option>
+
+                    <option value="Bird">
+                        🐦 Bird
+                    </option>
+
+                    <option value="Hamster">
+                        🐹 Hamster
+                    </option>
+
+                    <option value="Guinea Pig">
+                        🐹 Guinea Pig
+                    </option>
+
+                    <option value="Fish">
+                        🐠 Fish
+                    </option>
+
+                    <option value="Other">
+                        🐾 Other
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="breed">
+                    Breed
+                </label>
+
+                <input
+                    type="text"
+                    id="breed"
+                    placeholder="e.g. Golden Retriever"
+                >
+
+            </div>
+
+
+            <div class="buttons">
+
+                <button
+                    type="submit"
+                    class="save-button">
+                    Save Pet
+                </button>
+
+                <a
+                    href="profile.html"
+                    class="cancel-button">
+                    Cancel
+                </a>
+
+            </div>
+
+        </form>
+
+    </section>
+
+</main>
+
+
+<script src="/storage.js"></script>
+
+<script>
+
+    document
+        .getElementById("petForm")
+        .addEventListener(
+            "submit",
+            function(event) {
+
+                event.preventDefault();
+
+                const name =
+                    document
+                        .getElementById("petName")
+                        .value
+                        .trim();
+
+                const type =
+                    document
+                        .getElementById("petType")
+                        .value;
+
+                const breed =
+                    document
+                        .getElementById("breed")
+                        .value
+                        .trim();
+
+
+                if (!name || !type) {
+
+                    alert(
+                        "Please enter the pet name and type."
+                    );
+
+                    return;
+                }
+
+
+                const pets =
+                    getStoredArray("pets");
+
+
+                const pet = {
+
+                    id: makeId("pet"),
+
+                    name: name,
+
+                    type: type,
+
+                    breed: breed,
+
+                    createdAt:
+                        new Date().toISOString()
+
+                };
+
+
+                pets.push(pet);
+
+
+                const saved =
+                    saveStoredArray(
+                        "pets",
+                        pets
+                    );
+
+
+                if (!saved) {
+
+                    alert(
+                        "Could not save the pet. Please try again."
+                    );
+
+                    return;
+                }
+
+
+                setSelectedPetId(
+                    pet.id
+                );
+
+
+                document
+                    .getElementById("message")
+                    .style.display = "block";
+
+
+                setTimeout(
+                    function() {
+
+                        window.location.href =
+                            "profile.html";
+
+                    },
+                    700
+                );
+
+            }
+        );
+
+</script>
+
+</body>
+</html>

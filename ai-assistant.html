@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pet Care Planner - AI Assistant</title>
+  <style>
+    :root {
+      --teal: #4fa6a8;
+      --dark-teal: #28777a;
+      --mint: #bfe8df;
+      --soft-mint: #eaf8f5;
+      --sky: #d8eff4;
+      --lavender: #e8def5;
+      --text: #304b53;
+      --muted: #7b8d92;
+      --border: #dce9e8;
+      --shadow: 0 10px 28px rgba(35, 93, 103, 0.08);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(135deg, #f4fbfa, #f9fcff);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    nav {
+      width: 100%;
+      background: rgba(255,255,255,0.95);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--dark-teal);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 7px;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 8px 10px;
+      border-radius: 10px;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      background: var(--soft-mint);
+      color: var(--dark-teal);
+    }
+
+    .container {
+      width: min(1050px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 30px 0 50px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #e7f8f4, #eee8f8);
+      border-radius: 22px;
+      padding: 26px;
+      margin-bottom: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero h1 {
+      font-size: 26px;
+      color: #2b5960;
+      margin-bottom: 6px;
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .assistant-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 18px;
+    }
+
+    .card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .sidebar {
+      padding: 18px;
+    }
+
+    .sidebar h3 {
+      font-size: 14px;
+      margin-bottom: 12px;
+      color: #35545b;
+    }
+
+    .pet-option {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: #fff;
+      border-radius: 12px;
+      padding: 10px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-align: left;
+      font-family: inherit;
+    }
+
+    .pet-option.selected {
+      background: var(--soft-mint);
+      border-color: var(--teal);
+    }
+
+    .pet-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--mint), var(--sky));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .quick-title {
+      margin: 18px 0 8px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #536a70;
+    }
+
+    .quick-question {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: #fcfefe;
+      border-radius: 10px;
+      padding: 9px 10px;
+      margin-bottom: 6px;
+      text-align: left;
+      font-size: 12px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .quick-question:hover {
+      background: var(--soft-mint);
+    }
+
+    .chat-card {
+      display: flex;
+      flex-direction: column;
+      height: 620px;
+    }
+
+    .chat-header {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 18px;
+      background: #fbfdfd;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .message {
+      display: flex;
+      gap: 8px;
+      max-width: 85%;
+    }
+
+    .message.user {
+      align-self: flex-end;
+      flex-direction: row-reverse;
+    }
+
+    .message-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .message.assistant .message-avatar {
+      background: var(--soft-mint);
+    }
+
+    .message.user .message-avatar {
+      background: var(--sky);
+    }
+
+    .message-content {
+      padding: 11px 14px;
+      border-radius: 14px;
+      font-size: 13.5px;
+      line-height: 1.55;
+    }
+
+    .message.assistant .message-content {
+      background: white;
+      border: 1px solid var(--border);
+      color: #4a6066;
+    }
+
+    .message.user .message-content {
+      background: var(--dark-teal);
+      color: white;
+    }
+
+    .message-content ul {
+      padding-left: 18px;
+      margin: 8px 0;
+    }
+
+    .chat-input-area {
+      padding: 12px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 8px;
+    }
+
+    .chat-input {
+      flex: 1;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 11px 13px;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      resize: none;
+      min-height: 44px;
+    }
+
+    .chat-input:focus {
+      border-color: var(--teal);
+    }
+
+    .send-btn {
+      width: 44px;
+      height: 44px;
+      border: none;
+      border-radius: 12px;
+      background: var(--dark-teal);
+      color: white;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    .disclaimer {
+      margin-top: 18px;
+      padding: 12px 15px;
+      background: #fffaf0;
+      border: 1px solid #f0e3c6;
+      border-radius: 12px;
+      font-size: 12.5px;
+      color: #776b55;
+    }
+
+    @media (max-width: 800px) {
+      .assistant-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="profile.html" class="logo">🐾 Pet Care Planner</a>
+  <div class="nav-links">
+    <a href="profile.html">Dashboard</a>
+    <a href="add-pet.html">Add Pet</a>
+    <a href="add-task.html">Tasks</a>
+    <a href="add-vaccination.html">Vaccinations</a>
+    <a href="add-reminder.html">Reminders</a>
+    <a href="add-lost-pet.html">Lost Pet</a>
+    <a href="breed-info.html">Breed Info</a>
+    <a href="health.html">Health</a>
+    <a href="care.html">Care</a>
+    <a href="medicine.html">Medicine</a>
+    <a href="ai-assistant.html" class="active">AI Assistant</a>
+  </div>
+</nav>
+
+<main class="container">
+
+  <div class="hero">
+    <h1>Pet Care AI Assistant 🤖</h1>
+    <p>Ask questions about your pet’s health, care, or records. Select a pet for better context.</p>
+  </div>
+
+  <div class="assistant-layout">
+
+    <!-- Sidebar -->
+    <aside class="card sidebar">
+      <h3>Your Pets</h3>
+      <div id="petList"></div>
+
+      <div class="quick-title">QUICK QUESTIONS</div>
+      <button class="quick-question" data-q="Give me a care summary">🐾 Care summary</button>
+      <button class="quick-question" data-q="Daily care checklist">📋 Daily care checklist</button>
+      <button class="quick-question" data-q="Show my pet records">📊 Record overview</button>
+      <button class="quick-question" data-q="What should I discuss with the vet">🩺 Vet discussion</button>
+      <button class="quick-question" data-q="My pet is not eating">🍽️ Not eating</button>
+    </aside>
+
+    <!-- Chat -->
+    <section class="card chat-card">
+      <div class="chat-header">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#bfe8df,#e8def5);display:flex;align-items:center;justify-content:center;font-size:20px;">🤖</div>
+          <div>
+            <div style="font-weight:700;font-size:15px;">Pet Care Assistant</div>
+            <div style="font-size:12px;color:#7b8d92;">Ready to help</div>
+          </div>
+        </div>
+        <div style="font-size:12px;color:#28777a;font-weight:600;">● Online</div>
+      </div>
+
+      <div class="chat-messages" id="chatMessages">
+        <div class="message assistant">
+          <div class="message-avatar">🤖</div>
+          <div class="message-content">
+            Hello! 🐾 I’m your Pet Care Assistant.<br><br>
+            Select a pet on the left and ask me anything about care, health, or records.
+          </div>
+        </div>
+      </div>
+
+      <div class="chat-input-area">
+        <textarea id="chatInput" class="chat-input" placeholder="Ask something about your pet..." rows="1"></textarea>
+        <button class="send-btn" id="sendBtn">➤</button>
+      </div>
+    </section>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Important:</strong> This is a local demo assistant. It does <strong>not</strong> replace a real veterinarian. For serious symptoms, please contact a qualified vet.
+  </div>
+</main>
+
+<script>
+  // ========== Helpers ==========
+  function escapeHTML(str) {
+    return String(str ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function getPets() {
+    try {
+      const data = JSON.parse(localStorage.getItem("pets") || "[]");
+      return Array.isArray(data) ? data : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function getPetEmoji(type) {
+    const t = (type || "").toLowerCase();
+    if (t.includes("dog")) return "🐶";
+    if (t.includes("cat")) return "🐱";
+    if (t.includes("rabbit")) return "🐰";
+    if (t.includes("bird")) return "🐦";
+    return "🐾";
+  }
+
+  // ========== State ==========
+  let pets = getPets();
+  let selectedPetId = pets.length ? pets[0].id : null;
+
+  // ========== Render Pets ==========
+  function renderPets() {
+    pets = getPets();
+    const list = document.getElementById("petList");
+
+    if (pets.length === 0) {
+      list.innerHTML = `<p style="font-size:13px;color:#7b8d92;text-align:center;padding:10px;">No pets yet.<br><a href="add-pet.html" style="color:#28777a;font-weight:600;">Add a pet</a></p>`;
+      return;
+    }
+
+    list.innerHTML = pets.map(pet => {
+      const selected = String(pet.id) === String(selectedPetId);
+      return `
+        <button class="pet-option ${selected ? "selected" : ""}" data-id="${pet.id}">
+          <div class="pet-icon">${getPetEmoji(pet.type)}</div>
+          <div>
+            <div style="font-weight:600;font-size:13px;">${escapeHTML(pet.name || "Unnamed")}</div>
+            <div style="font-size:11px;color:#7b8d92;">${escapeHTML(pet.type || "Pet")}</div>
+          </div>
+        </button>`;
+    }).join("");
+
+    document.querySelectorAll(".pet-option").forEach(btn => {
+      btn.addEventListener("click", () => {
+        selectedPetId = btn.dataset.id;
+        renderPets();
+        addBot("I'm now focusing on <strong>" + getSelectedName() + "</strong>. Ask me anything! 🐾");
+      });
+    });
+  }
+
+  function getSelectedName() {
+    const pet = pets.find(p => String(p.id) === String(selectedPetId));
+    return pet ? (pet.name || "your pet") : "your pet";
+  }
+
+  // ========== Response Engine ==========
+  function getAnswer(question) {
+    const q = question.toLowerCase();
+    const name = escapeHTML(getSelectedName());
+
+    // Not eating
+    if (q.includes("not eating") || q.includes("not eat") || q.includes("won't eat") || q.includes("no appetite") || q.includes("stopped eating")) {
+      return `
+        <strong>About ${name} not eating 🍽️</strong><br><br>
+        Not eating for more than 24 hours (especially in cats) can be serious.<br><br>
+        <strong>Possible reasons:</strong>
+        <ul>
+          <li>Dental pain or mouth problems</li>
+          <li>Stomach upset / nausea</li>
+          <li>Stress or change in environment</li>
+          <li>Underlying illness</li>
+        </ul>
+        <strong>What you can do:</strong>
+        <ul>
+          <li>Offer a small amount of favorite wet food (slightly warmed)</li>
+          <li>Make sure fresh water is available</li>
+          <li>Check for vomiting, diarrhea, or lethargy</li>
+        </ul>
+        <strong>⚠️ Please contact a veterinarian</strong> if ${name} has not eaten for 2 days or shows other symptoms. This assistant cannot diagnose the cause.
+      `;
+    }
+
+    // Sleeping / lethargy
+    if (q.includes("sleep") || q.includes("letharg") || q.includes("tired") || q.includes("no energy") || q.includes("weak")) {
+      return `
+        <strong>About ${name}'s energy / sleep 😴</strong><br><br>
+        Changes in sleeping pattern or low energy can indicate discomfort, pain, or illness.<br><br>
+        Please monitor:
+        <ul>
+          <li>Appetite and water intake</li>
+          <li>Whether the pet is hiding more than usual</li>
+          <li>Any vomiting, diarrhea, or breathing changes</li>
+        </ul>
+        If the change lasts more than a day or is combined with other symptoms, a vet check is recommended.
+      `;
+    }
+
+    // Care summary
+    if (q.includes("care summary") || q.includes("summary")) {
+      return `<strong>Care summary for ${name}</strong><br><br>I can show a summary once more records are added. You can also ask about specific topics like feeding, vaccinations, or daily care.`;
+    }
+
+    // Daily care
+    if (q.includes("daily") || q.includes("checklist") || q.includes("routine")) {
+      return `
+        <strong>Daily care checklist for ${name} 📋</strong>
+        <ul>
+          <li>Fresh clean water</li>
+          <li>Regular feeding</li>
+          <li>Any prescribed medicines</li>
+          <li>Exercise / play time</li>
+          <li>Observe appetite and energy</li>
+          <li>Keep living area clean</li>
+        </ul>
+      `;
+    }
+
+    // Vet
+    if (q.includes("vet") || q.includes("doctor") || q.includes("veterinarian")) {
+      return `
+        <strong>Topics to discuss with your vet 🩺</strong>
+        <ul>
+          <li>Changes in appetite or water drinking</li>
+          <li>Weight changes</li>
+          <li>Low energy or unusual behavior</li>
+          <li>Current medicines</li>
+          <li>Vaccination status</li>
+        </ul>
+      `;
+    }
+
+    // Default
+    return `
+      I can help with questions about ${name}'s care and general pet health. 🐾<br><br>
+      Try asking about:
+      <ul>
+        <li>Not eating</li>
+        <li>Low energy / sleeping issues</li>
+        <li>Daily care checklist</li>
+        <li>What to tell the vet</li>
+      </ul>
+      <br>For any serious symptom, please see a real veterinarian.
+    `;
+  }
+
+  // ========== Chat Functions ==========
+  function addUser(text) {
+    const box = document.getElementById("chatMessages");
+    const div = document.createElement("div");
+    div.className = "message user";
+    div.innerHTML = `
+      <div class="message-avatar">👤</div>
+      <div class="message-content">${escapeHTML(text)}</div>`;
+    box.appendChild(div);
+    box.scrollTop = box.scrollHeight;
+  }
+
+  function addBot(html) {
+    const box = document.getElementById("chatMessages");
+    const div = document.createElement("div");
+    div.className = "message assistant";
+    div.innerHTML = `
+      <div class="message-avatar">🤖</div>
+      <div class="message-content">${html}</div>`;
+    box.appendChild(div);
+    box.scrollTop = box.scrollHeight;
+  }
+
+  function sendMessage(text) {
+    if (!text.trim()) return;
+    addUser(text);
+    setTimeout(() => {
+      addBot(getAnswer(text));
+    }, 500);
+  }
+
+  // ========== Events ==========
+  document.getElementById("sendBtn").addEventListener("click", () => {
+    const input = document.getElementById("chatInput");
+    const text = input.value.trim();
+    if (text) {
+      input.value = "";
+      sendMessage(text);
+    }
+  });
+
+  document.getElementById("chatInput").addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      document.getElementById("sendBtn").click();
+    }
+  });
+
+  document.querySelectorAll(".quick-question").forEach(btn => {
+    btn.addEventListener("click", () => {
+      sendMessage(btn.dataset.q);
+    });
+  });
+
+  // Start
+  renderPets();
+</script>
+</body>
+</html>

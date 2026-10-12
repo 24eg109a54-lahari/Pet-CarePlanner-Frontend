@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Register - Pet Care Planner</title>
+    <style>
+        :root {
+            --teal: #0d9488;
+            --teal-dark: #0f766e;
+            --teal-light: #ccfbf1;
+            --mint-bg: #f0fdf4;
+            --purple: #7c3aed;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --danger: #ef4444;
+            --success: #10b981;
+            --card-shadow: 0 20px 40px rgba(13, 148, 136, 0.12), 0 4px 12px rgba(0, 0, 0, 0.04);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f0fdfa 0%, #e0f2fe 50%, #f5f3ff 100%);
+            display: flex;
+            flex-direction: column;
+            color: var(--text-dark);
+        }
+
+        .auth-nav {
+            padding: 1.25rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .auth-nav .brand {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--teal);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .auth-nav .back-link {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--teal-dark);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(13, 148, 136, 0.2);
+            transition: all 0.2s;
+        }
+
+        .auth-nav .back-link:hover {
+            background: white;
+            box-shadow: 0 4px 12px rgba(13, 148, 136, 0.15);
+            transform: translateY(-1px);
+        }
+
+        .auth-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem 4rem;
+        }
+
+        .auth-card {
+            width: 100%;
+            max-width: 440px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border-radius: 24px;
+            padding: 2.5rem 2rem;
+            box-shadow: var(--card-shadow);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .auth-header .avatar-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--teal-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 1rem;
+            box-shadow: 0 8px 16px rgba(13, 148, 136, 0.15);
+        }
+
+        .auth-header h1 {
+            font-size: 1.8rem;
+            color: var(--text-dark);
+            font-weight: 700;
+        }
+
+        .auth-header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Tabs */
+        .tab-switcher {
+            display: flex;
+            background: #f1f5f9;
+            padding: 4px;
+            border-radius: 14px;
+            margin-bottom: 1.75rem;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 0.65rem;
+            border: none;
+            background: transparent;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: var(--teal);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 1.25rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 0.4rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            font-size: 0.95rem;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 12px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background: #f8fafc;
+            color: var(--text-dark);
+        }
+
+        .form-input:focus {
+            background: white;
+            border-color: var(--teal);
+            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 4px;
+        }
+
+        .toggle-password:hover {
+            color: var(--text-dark);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 0.9rem;
+            background: var(--teal);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .submit-btn:hover {
+            background: var(--teal-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 8px 18px rgba(13, 148, 136, 0.25);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .status-msg {
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            margin-bottom: 1.25rem;
+            display: none;
+        }
+
+        .status-msg.error {
+            display: block;
+            background: #fef2f2;
+            color: var(--danger);
+            border: 1px solid #fecaca;
+        }
+
+        .status-msg.success {
+            display: block;
+            background: #ecfdf5;
+            color: var(--success);
+            border: 1px solid #a7f3d0;
+        }
+
+        .security-badge {
+            margin-top: 1.5rem;
+            padding-top: 1.25rem;
+            border-top: 1px solid #e2e8f0;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <header class="auth-nav">
+        <a href="/index.html" class="brand">🐾 Pet Care Planner</a>
+        <a href="/index.html" class="back-link">← Back to Home</a>
+    </header>
+
+    <main class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <div class="avatar-icon">🐶</div>
+                <h1 id="formTitle">Welcome Back</h1>
+                <p id="formSubtitle">Log in to manage your pets & schedules</p>
+            </div>
+
+            <!-- Tab Switcher -->
+            <div class="tab-switcher" role="tablist">
+                <button type="button" class="tab-btn active" id="tabLogin" onclick="switchTab('login')">Sign In</button>
+                <button type="button" class="tab-btn" id="tabRegister" onclick="switchTab('register')">Create Account</button>
+            </div>
+
+            <!-- Message box -->
+            <div id="statusMsg" class="status-msg"></div>
+
+            <!-- LOGIN FORM -->
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="loginEmail">Email Address</label>
+                    <input type="email" id="loginEmail" class="form-input" placeholder="you@example.com" required autocomplete="email">
+                </div>
+
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="loginPassword" class="form-input" placeholder="••••••••" required autocomplete="current-password">
+                        <button type="button" class="toggle-password" onclick="togglePasswordVisibility('loginPassword', this)">👁️</button>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn" id="loginSubmitBtn">
+                    <span>Sign In</span>
+                </button>
+            </form>
+
+            <!-- REGISTER FORM -->
+            <form id="registerForm" class="hidden" onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label for="regName">Full Name</label>
+                    <input type="text" id="regName" class="form-input" placeholder="Alex Morgan" required autocomplete="name">
+                </div>
+
+                <div class="form-group">
+                    <label for="regEmail">Email Address</label>
+                    <input type="email" id="regEmail" class="form-input" placeholder="you@example.com" required autocomplete="email">
+                </div>
+
+                <div class="form-group">
+                    <label for="regPassword">Password</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="regPassword" class="form-input" placeholder="At least 6 characters" minlength="6" required autocomplete="new-password">
+                        <button type="button" class="toggle-password" onclick="togglePasswordVisibility('regPassword', this)">👁️</button>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn" id="regSubmitBtn">
+                    <span>Create Account</span>
+                </button>
+            </form>
+
+            <div class="security-badge">
+                🔒 Safe & Secure • Credentials are encrypted and protected
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+        import { loginUser, registerUser } from "/src/auth.js";
+
+        // Immediately purge any legacy userPassword from localStorage to prevent DevTools inspect leaks
+        try {
+            localStorage.removeItem("userPassword");
+        } catch (e) {}
+
+        const statusMsg = document.getElementById("statusMsg");
+        const formTitle = document.getElementById("formTitle");
+        const formSubtitle = document.getElementById("formSubtitle");
+        const tabLogin = document.getElementById("tabLogin");
+        const tabRegister = document.getElementById("tabRegister");
+        const loginForm = document.getElementById("loginForm");
+        const registerForm = document.getElementById("registerForm");
+
+        window.showMessage = function(message, type = "error") {
+            statusMsg.textContent = message;
+            statusMsg.className = `status-msg ${type}`;
+        };
+
+        window.clearMessage = function() {
+            statusMsg.textContent = "";
+            statusMsg.className = "status-msg";
+        };
+
+        window.switchTab = function(mode) {
+            clearMessage();
+            if (mode === "register") {
+                tabLogin.classList.remove("active");
+                tabRegister.classList.add("active");
+                loginForm.classList.add("hidden");
+                registerForm.classList.remove("hidden");
+                formTitle.textContent = "Create Account";
+                formSubtitle.textContent = "Join Pet Care Planner to care for your pets";
+            } else {
+                tabRegister.classList.remove("active");
+                tabLogin.classList.add("active");
+                registerForm.classList.add("hidden");
+                loginForm.classList.remove("hidden");
+                formTitle.textContent = "Welcome Back";
+                formSubtitle.textContent = "Log in to manage your pets & schedules";
+            }
+        };
+
+        window.togglePasswordVisibility = function(inputId, btn) {
+            const input = document.getElementById(inputId);
+            if (input.type === "password") {
+                input.type = "text";
+                btn.textContent = "🙈";
+            } else {
+                input.type = "password";
+                btn.textContent = "👁️";
+            }
+        };
+
+        window.handleLogin = async function(e) {
+            e.preventDefault();
+            clearMessage();
+            const btn = document.getElementById("loginSubmitBtn");
+            const email = document.getElementById("loginEmail").value.trim();
+            const password = document.getElementById("loginPassword").value;
+
+            if (!email || !password) {
+                showMessage("Please enter both email and password.");
+                return;
+            }
+
+            try {
+                btn.disabled = true;
+                btn.innerHTML = "<span>Signing in...</span>";
+
+                await loginUser({ email, password });
+
+                showMessage("Login successful! Redirecting...", "success");
+                setTimeout(() => {
+                    window.location.href = "/profile.html";
+                }, 600);
+            } catch (err) {
+                showMessage(err.message || "Invalid credentials.");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = "<span>Sign In</span>";
+            }
+        };
+
+        window.handleRegister = async function(e) {
+            e.preventDefault();
+            clearMessage();
+            const btn = document.getElementById("regSubmitBtn");
+            const name = document.getElementById("regName").value.trim();
+            const email = document.getElementById("regEmail").value.trim();
+            const password = document.getElementById("regPassword").value;
+
+            if (!name || !email || !password) {
+                showMessage("Please fill all required fields.");
+                return;
+            }
+
+            try {
+                btn.disabled = true;
+                btn.innerHTML = "<span>Creating account...</span>";
+
+                await registerUser({ name, email, password });
+
+                showMessage("Account created! Logging you in...", "success");
+                // Automatically log in newly registered user
+                await loginUser({ email, password });
+                setTimeout(() => {
+                    window.location.href = "/profile.html";
+                }, 800);
+            } catch (err) {
+                showMessage(err.message || "Registration failed.");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = "<span>Create Account</span>";
+            }
+        };
+
+        // Check URL query parameters (e.g. ?mode=register)
+        const params = new URLSearchParams(window.location.search);
+        if (params.get("mode") === "register") {
+            switchTab("register");
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Health Information - Pet Care Planner</title>
+  <style>
+    :root {
+      --teal: #4fa6a8;
+      --dark-teal: #28777a;
+      --mint: #bfe8df;
+      --soft-mint: #eaf8f5;
+      --text: #304b53;
+      --muted: #7b8d92;
+      --border: #dce9e8;
+      --shadow: 0 10px 28px rgba(35, 93, 103, 0.08);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(135deg, #f4fbfa, #eef9fb, #faf7fd);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    a { text-decoration: none; color: inherit; }
+    .navbar {
+      position: sticky; top: 0; z-index: 1000;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-container {
+      max-width: 1250px; margin: auto; padding: 15px 20px;
+      display: flex; align-items: center; justify-content: space-between; gap: 20px;
+    }
+    .logo { color: var(--dark-teal); font-size: 19px; font-weight: 900; }
+    .nav-links { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; }
+    .nav-links a {
+      padding: 8px 10px; border-radius: 10px;
+      color: var(--muted); font-size: 11px; font-weight: 700;
+    }
+    .nav-links a:hover, .nav-links a.active {
+      background: var(--soft-mint); color: var(--dark-teal);
+    }
+    .logout-btn {
+      background: #f1f5f9; border: none; padding: 8px 14px;
+      border-radius: 10px; cursor: pointer; font-weight: 700;
+      color: #475569; font-size: 12px;
+    }
+    .container {
+      width: min(1050px, calc(100% - 30px));
+      margin: auto; padding: 35px 0 60px;
+    }
+    h1 { font-size: 28px; color: #284b53; margin-bottom: 8px; }
+    .subtitle { color: var(--muted); font-size: 15px; margin-bottom: 35px; }
+    .section-title {
+      font-size: 22px; color: var(--dark-teal);
+      margin: 40px 0 18px; padding-bottom: 8px;
+      border-bottom: 2px solid var(--mint);
+    }
+    .illness-card {
+      background: white; border: 1px solid var(--border);
+      border-radius: 18px; padding: 22px; margin-bottom: 16px;
+      box-shadow: var(--shadow);
+    }
+    .illness-card h3 { font-size: 17px; color: #b45309; margin-bottom: 10px; }
+    .illness-card p { color: #4a5f66; font-size: 14px; line-height: 1.65; margin-bottom: 6px; }
+    .illness-card strong { color: #304b53; }
+    .tips-section {
+      margin-top: 45px; background: white;
+      border: 1px solid var(--border); border-radius: 20px;
+      padding: 28px; box-shadow: var(--shadow);
+    }
+    .tips-section h2 { font-size: 20px; color: #2d4e56; margin-bottom: 18px; }
+    .tip-item { display: flex; gap: 12px; margin-bottom: 14px; align-items: flex-start; }
+    .tip-item .bullet {
+      background: var(--soft-mint); color: var(--dark-teal);
+      width: 26px; height: 26px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 800; flex-shrink: 0;
+    }
+    .tip-item p { color: #4a5f66; font-size: 14.5px; line-height: 1.55; }
+    @media (max-width: 700px) {
+      .nav-container { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="profile.html" class="logo">🐾 Pet Care Planner</a>
+    <div class="nav-links">
+      <a href="profile.html">Dashboard</a>
+      <a href="add-pet.html">Add Pet</a>
+      <a href="add-task.html">Tasks</a>
+      <a href="add-vaccination.html">Vaccinations</a>
+      <a href="add-reminder.html">Reminders</a>
+      <a href="add-lost-pet.html">Lost Pet</a>
+      <a href="breed-info.html">Breed Info</a>
+      <a href="health.html" class="active">Health</a>
+      <a href="care.html">Care</a>
+      <a href="medicine.html">Medicine</a>
+      <a href="ai-assistant.html">AI Assistant</a>
+    </div>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+</nav>
+
+<div class="container">
+  <h1>Health Information ❤️</h1>
+  <p class="subtitle">Detailed guide to common illnesses in Dogs, Cats, Rabbits, and Birds — including symptoms and what to do.</p>
+
+  <!-- DOGS -->
+  <h2 class="section-title">🐶 Common Illnesses in Dogs</h2>
+
+  <div class="illness-card">
+    <h3>1. Parvovirus (Parvo)</h3>
+    <p><strong>What it is:</strong> Highly contagious virus that attacks the intestines and immune system, especially dangerous in puppies.</p>
+    <p><strong>Symptoms:</strong> Severe vomiting, bloody diarrhea, extreme lethargy, loss of appetite, fever, dehydration.</p>
+    <p><strong>What to do:</strong> This is a medical emergency. Take the dog to a vet immediately. Vaccination is the best prevention.</p>
+  </div>
+
+  <div class="illness-card">
+    <h3>2. Kennel Cough</h3>
+    <p><strong>What it is:</strong> Contagious respiratory infection.</p>
+    <p><strong>Symptoms:</strong> Strong dry cough, gagging, runny nose, mild fever.</p>
+    <p><strong>What to do:</strong> Usually mild but can become serious in puppies or senior dogs. See a vet if it lasts more than a few days.</p>
+  </div>
+
+  <div class="illness-card">
+    <h3>3. Ear Infections</h3>
+    <p><strong>What it is:</strong> Very common, especially in dogs with floppy ears or allergies.</p>
+    <p><strong>Symptoms:</strong> Head shaking, scratching ears, bad smell, redness, discharge.</p>
+    <p><strong>What to do:</strong> Clean only with vet-approved solution. Visit the vet for proper treatment.</p>
+  </div>
+
+  <div class="illness-card">
+    <h3>4. Hip Dysplasia</h3>
+    <p><strong>What it is:</strong> Genetic joint problem common in larger breeds.</p>
+    <p><strong>Symptoms:</strong> Difficulty standing, limping, reluctance to jump or climb stairs.</p>
+    <p><strong>What to do:</strong> Weight control, joint supplements, and veterinary care help manage it.</p>
+  </div>
+
+  <div class="illness-card">
+    <h3>5. Skin Allergies & Hot Spots</h3>
+    <p><strong>What it is:</strong> Allergic reactions to food, fleas, or environment.</p>
+    <p><strong>Symptoms:</strong> Intense itching, red skin, hair loss, licking paws, hot spots.</p>
+    <p><strong>What to do:</strong> Identify and remove the cause. Vet may prescribe medication or special diet.</p>
+  </div>
+
+  <!-- CATS -->
+  <h2 class="section-title">🐱 Common Illnesses in Cats</h2>
+
+  <div class="illness-card">
+    <h3>1. Urinary Blockage / FLUTD</h3>
+    <p><strong>What it is:</strong> Inflammation or blockage of the urinary tract. Life-threatening in male cats.</p>
+    <p><strong>Symptoms:</strong> Straining in litter box, frequent attempts to urinate, crying, blood in urine.</p>
+    <p><strong>What to do:</strong> Emergency if the cat cannot urinate. Take to vet immediately.</p>
+  </div>
+
+  <div class="illness-card">
+    <h3>2. Upper Respiratory Infection (Cat Flu)</h3>
+    <p><strong>What it is:</strong> Viral or bacterial infection of nose, throat, and eyes.</p>
+    <p><strong>Symptoms:</strong> Sneezing, runny nose, watery eyes, loss of appetite, mild fever.</p>
+    <p><strong>What to do:</strong> Keep warm, encourage eating. See vet if symptoms last more than a few days or appetite is lost.</p>
+  </div>
+
+  <div class="illness-card">
+    <h3>3. Chronic Kidney Disease</h3>
+    <p><strong>What it is:</strong> Very common in older cats. Kidneys gradually lose function.</p>
+    <p><strong>Symptoms:</strong> Increased thirst and urination, weight loss, poor appetite, bad breath, lethargy.</p>
+    <p><strong>What to do:</strong> Early blood tests help. Special kidney diets and treatment can slow progression.</p>
+  </div>
+
+  <div class="illness-card">
+    <h3>4. Dental Disease</h3>
+    <p><strong>What it is:</strong> Extremely common in adult cats.</p>
+    <p><strong>Symptoms:</strong> Bad breath, drooling, difficulty eating, red gums, pawing at mouth.</p>
+    <p><strong>What to do:</strong> Regular dental checks and professional cleaning when needed.</p>
+  </div>
+
+  <div class="illness-card">
+    <h3>5. Hyperthyroidism</h3>
+    <p><strong>What it is:</strong> Overactive thyroid gland, common in older cats.</p>
+    <p><strong>Symptoms:</strong> Weight loss despite increased appetite, hyperactivity, vomiting, increased thirst.</p>
+    <p><strong>What to do:</strong> Blood test confirms diagnosis. Medication, diet, or other treatments are available.</p>
+  </div>
+
+  <!-- RABBITS -->
+  <h2 class="section-title">🐰 Common Illnesses in Rabbits</h2>
+
+  <div class="illness-card">
+    <h3>1. Gastrointestinal (GI) Stasis</h3>
+    <p><strong>What it is:</strong> The digestive system slows or stops. Very dangerous.</p>
+    <p><strong>Symptoms:</strong> Small or no droppings, loss of appetite, hunched posture, lethargy.</p>
+    <p><strong>What to do:</strong> Emergency. Take to a rabbit-savvy vet immediately. Prevention: unlimited hay and plenty of fiber.</p>
+  </div>
+
+  <div class="illness-card">
+    <h3>2. Dental Problems (Overgrown Teeth)</h3>
+    <p><strong>What it is:</strong> Rabbit teeth grow continuously. Improper wear causes pain.</p>
+    <p><strong>Symptoms:</strong> Drooling, difficulty eating, weight loss, preference for soft food.</p>
+    <p><strong>What to do:</strong> Regular dental checks. Unlimited hay is the best prevention.</p>
+  </div>
+
+  <div class="illness-card">
+    <h3>3. Snuffles (Pasteurellosis)</h3>
+    <p><strong>What it is:</strong> Bacterial respiratory infection.</p>
+    <p><strong>Symptoms:</strong> Sneezing, runny nose, matted front paws, labored breathing.</p>
+    <p><strong>What to do:</strong> Needs veterinary treatment with antibiotics. Keep environment clean and stress-free.</p>
+  </div>
+
+  <!-- BIRDS -->
+  <h2 class="section-title">🐦 Common Illnesses in Birds</h2>
+
+  <div class="illness-card">
+    <h3>1. Respiratory Infections</h3>
+    <p><strong>What it is:</strong> Bacterial, viral, or fungal infections of the airways.</p>
+    <p><strong>Symptoms:</strong> Tail bobbing, open-mouth breathing, discharge from nostrils, sneezing, lethargy.</p>
+    <p><strong>What to do:</strong> Birds hide illness well. See an avian vet quickly if breathing changes.</p>
+  </div>
+
+  <div class="illness-card">
+    <h3>2. Egg Binding (Female Birds)</h3>
+    <p><strong>What it is:</strong> Egg gets stuck inside the bird.</p>
+    <p><strong>Symptoms:</strong> Straining, sitting at bottom of cage, swollen abdomen, loss of appetite.</p>
+    <p><strong>What to do:</strong> Emergency. Keep warm and take to an avian vet immediately.</p>
+  </div>
+
+  <div class="illness-card">
+    <h3>3. Psittacosis (Parrot Fever)</h3>
+    <p><strong>What it is:</strong> Bacterial disease that can also affect humans.</p>
+    <p><strong>Symptoms:</strong> Fluffed feathers, lethargy, green droppings, discharge from eyes/nose, breathing difficulty.</p>
+    <p><strong>What to do:</strong> Requires veterinary diagnosis and treatment. Good hygiene is important.</p>
+  </div>
+
+  <!-- EMERGENCY -->
+  <h2 class="section-title">🚨 When to See a Vet Immediately</h2>
+  <div class="illness-card">
+    <p><strong>Seek emergency care if you notice:</strong></p>
+    <p>
+      • Not eating for more than 24 hours (especially cats and rabbits)<br>
+      • Repeated vomiting or diarrhea with blood<br>
+      • Difficulty breathing or blue/pale gums<br>
+      • Collapse, seizures, or extreme lethargy<br>
+      • Inability to urinate<br>
+      • Sudden swelling of face or body<br>
+      • Known poisoning
+    </p>
+  </div>
+
+  <div class="tips-section">
+    <h2>Important Health Tips</h2>
+    <div class="tip-item"><div class="bullet">1</div><p>Always provide fresh water and change it daily.</p></div>
+    <div class="tip-item"><div class="bullet">2</div><p>Never give human medicines to pets — many are toxic.</p></div>
+    <div class="tip-item"><div class="bullet">3</div><p>Watch for sudden changes in appetite, energy, thirst, or bathroom habits.</p></div>
+    <div class="tip-item"><div class="bullet">4</div><p>Keep toxic foods away: chocolate, grapes, raisins, onions, garlic, xylitol, avocado (for birds).</p></div>
+    <div class="tip-item"><div class="bullet">5</div><p>Keep a basic pet first-aid kit and know the nearest 24-hour emergency clinic.</p></div>
+    <div class="tip-item"><div class="bullet">6</div><p>Regular vet check-ups can catch problems early.</p></div>
+  </div>
+</div>
+
+<script>
+  function logout() {
+    localStorage.removeItem("loggedIn");
+    localStorage.removeItem("userName");
+    localStorage.removeItem("userEmail");
+    window.location.href = "/";
+  }
+</script>
+</body>
+</html>

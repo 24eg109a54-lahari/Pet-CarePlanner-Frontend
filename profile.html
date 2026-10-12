@@ -1,0 +1,2730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Pet Care Planner - Dashboard</title>
+
+    <style>
+        :root {
+            --teal: #4fa6a8;
+            --dark-teal: #28777a;
+            --mint: #bfe8df;
+            --soft-mint: #eaf8f5;
+            --sky: #d8eff4;
+            --blue: #6caec4;
+            --lavender: #e8def5;
+            --purple: #8668a9;
+            --cream: #fffaf0;
+            --white: #ffffff;
+            --text: #304b53;
+            --muted: #7b8d92;
+            --border: #dce9e8;
+            --danger: #d66b6b;
+            --shadow: 0 10px 28px rgba(35, 93, 103, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: linear-gradient(
+                135deg,
+                #f4fbfa,
+                #eef9fb,
+                #faf7fd
+            );
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button {
+            font-family: inherit;
+        }
+
+        /* NAVBAR */
+
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-container {
+            max-width: 1250px;
+            margin: auto;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .logo {
+            color: var(--dark-teal);
+            font-size: 19px;
+            font-weight: 900;
+            white-space: nowrap;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: flex-end;
+        }
+
+        .nav-links a {
+            padding: 8px 10px;
+            border-radius: 10px;
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 700;
+            transition: 0.2s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: var(--soft-mint);
+            color: var(--dark-teal);
+        }
+
+        /* Logout Button */
+        .logout-btn {
+            background: #f1f5f9;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+            color: #475569;
+            font-size: 12px;
+            transition: 0.2s ease;
+        }
+
+        .logout-btn:hover {
+            background: #e2e8f0;
+        }
+
+        /* MAIN */
+
+        .container {
+            width: min(1200px, calc(100% - 30px));
+            margin: auto;
+            padding: 30px 0 60px;
+        }
+
+        /* HERO */
+
+        .hero {
+            padding: 35px;
+            border-radius: 28px;
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(191, 232, 223, 0.9),
+                    rgba(216, 239, 244, 0.95),
+                    rgba(232, 222, 245, 0.9)
+                );
+            box-shadow: var(--shadow);
+            margin-bottom: 28px;
+        }
+
+        .hero h1 {
+            font-size: 32px;
+            color: #284b53;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            color: #5d767d;
+            font-size: 14px;
+            line-height: 1.7;
+            max-width: 700px;
+        }
+
+        /* SECTION */
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .section-header h2 {
+            font-size: 21px;
+            color: #2d4e56;
+        }
+
+        .section-header a {
+            background: var(--soft-mint);
+            color: var(--dark-teal);
+            padding: 9px 13px;
+            border-radius: 11px;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        /* STATISTICS */
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 13px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 18px;
+            box-shadow: var(--shadow);
+        }
+
+        .stat-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--soft-mint);
+            font-size: 20px;
+            margin-bottom: 12px;
+        }
+
+        .stat-number {
+            font-size: 25px;
+            font-weight: 900;
+            color: var(--dark-teal);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--muted);
+        }
+
+        /* QUICK ACTIONS */
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 13px;
+        }
+
+        .quick-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            transition: 0.2s ease;
+        }
+
+        .quick-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .quick-card-icon {
+            font-size: 25px;
+            margin-bottom: 10px;
+        }
+
+        .quick-card h3 {
+            font-size: 14px;
+            margin-bottom: 5px;
+            color: #2d4e56;
+        }
+
+        .quick-card p {
+            color: var(--muted);
+            font-size: 10px;
+            line-height: 1.5;
+        }
+
+        /* PET OVERVIEW */
+
+        .pet-overview-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .pet-overview-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .pet-overview-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .pet-overview-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(
+                135deg,
+                var(--mint),
+                var(--sky)
+            );
+            font-size: 25px;
+        }
+
+        .pet-overview-header h3 {
+            font-size: 16px;
+            color: #2c4d55;
+        }
+
+        .pet-overview-header p {
+            color: var(--muted);
+            font-size: 10px;
+            margin-top: 3px;
+        }
+
+        .pet-count-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 7px;
+        }
+
+        .pet-count {
+            padding: 10px 5px;
+            background: #f7fbfb;
+            border-radius: 11px;
+            text-align: center;
+        }
+
+        .pet-count strong {
+            display: block;
+            font-size: 17px;
+            color: var(--dark-teal);
+        }
+
+        .pet-count span {
+            display: block;
+            margin-top: 3px;
+            color: var(--muted);
+            font-size: 8px;
+            font-weight: 700;
+        }
+
+        /* RECORDS */
+
+        .records-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .record-section {
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 18px;
+            box-shadow: var(--shadow);
+        }
+
+        .record-section h3 {
+            color: #2c4d55;
+            font-size: 15px;
+            margin-bottom: 14px;
+        }
+
+        .record-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .record-item {
+            padding: 13px;
+            background: #f8fcfc;
+            border: 1px solid #e5efee;
+            border-radius: 14px;
+        }
+
+        .record-item strong {
+            display: block;
+            color: #35555d;
+            font-size: 12px;
+            margin-bottom: 6px;
+        }
+
+        .record-item span {
+            display: block;
+            color: var(--muted);
+            font-size: 10px;
+            line-height: 1.5;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 25px 12px;
+            color: var(--muted);
+        }
+
+        .empty-state-icon {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            font-size: 11px;
+            margin-bottom: 10px;
+        }
+
+        .empty-state a {
+            display: inline-block;
+            background: var(--soft-mint);
+            color: var(--dark-teal);
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        /* DELETE BUTTON */
+
+        .delete-record-button {
+            margin-top: 10px;
+            padding: 7px 11px;
+            border-radius: 9px;
+            background: #fff0f0;
+            color: var(--danger);
+            font-family: inherit;
+            font-size: 10px;
+            font-weight: 800;
+            cursor: pointer;
+            border: none;
+            transition: 0.2s ease;
+        }
+
+        .delete-record-button:hover {
+            background: #ffe0e0;
+            transform: translateY(-1px);
+        }
+
+        /* PETS */
+
+        .pets-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .pet-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .pet-card-top {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+
+        .pet-card-icon {
+            width: 55px;
+            height: 55px;
+            border-radius: 16px;
+            background: linear-gradient(
+                135deg,
+                var(--mint),
+                var(--sky)
+            );
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .pet-card h3 {
+            font-size: 17px;
+            color: #2c4d55;
+        }
+
+        .pet-card p {
+            color: var(--muted);
+            font-size: 10px;
+            margin-top: 4px;
+        }
+
+        .pet-delete {
+            margin-top: 15px;
+            width: 100%;
+            padding: 9px;
+            border: none;
+            border-radius: 10px;
+            background: #fff0f0;
+            color: var(--danger);
+            font-size: 10px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .pet-delete:hover {
+            background: #ffe0e0;
+        }
+
+        /* LOST PET */
+
+        .lost-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 17px;
+            box-shadow: var(--shadow);
+            margin-bottom: 10px;
+        }
+
+        .lost-card strong {
+            font-size: 13px;
+            color: #2c4d55;
+        }
+
+        .lost-card span {
+            display: block;
+            color: var(--muted);
+            font-size: 10px;
+            margin-top: 5px;
+        }
+
+        .lost-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .lost-action-button {
+            padding: 8px 11px;
+            border: none;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .lost-action-button:hover {
+            transform: translateY(-1px);
+        }
+
+        .whatsapp-button {
+            background: #e7f8ee;
+            color: #16834b;
+        }
+
+        .copy-button {
+            background: #eef6ff;
+            color: #3975a8;
+        }
+
+        .call-button {
+            background: #fff6e6;
+            color: #a66b18;
+        }
+
+        .found-button {
+            background: var(--soft-mint);
+            color: var(--dark-teal);
+        }
+
+        .lost-delete-button {
+            background: #fff0f0;
+            color: var(--danger);
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 1050px) {
+            .stats-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .quick-actions {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .records-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pet-overview-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .pets-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 750px) {
+            .nav-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .nav-links {
+                justify-content: flex-start;
+            }
+
+            .hero {
+                padding: 25px;
+            }
+
+            .hero h1 {
+                font-size: 26px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .quick-actions {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .pet-overview-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pets-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                width: min(100% - 20px, 1200px);
+            }
+
+            .stats-grid,
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links a {
+                font-size: 10px;
+                padding: 7px 8px;
+            }
+
+            .pet-count-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- NAVIGATION -->
+
+<nav class="navbar">
+    <div class="nav-container">
+
+        <a href="profile.html" class="logo">
+            🐾 Pet Care Planner
+        </a>
+
+        <div class="nav-links">
+
+            <a href="profile.html" class="active">
+                Dashboard
+            </a>
+
+            <a href="add-pet.html">
+                Add Pet
+            </a>
+
+            <a href="add-task.html">
+                Tasks
+            </a>
+
+            <a href="add-vaccination.html">
+                Vaccinations
+            </a>
+
+            <a href="add-reminder.html">
+                Reminders
+            </a>
+
+            <a href="add-lost-pet.html">
+                Lost Pet
+            </a>
+
+            <a href="breed-info.html">
+                Breed Info
+            </a>
+
+            <a href="health.html">
+                Health
+            </a>
+
+            <a href="care.html">
+                Care
+            </a>
+
+            <a href="medicine.html">
+                Medicine
+            </a>
+
+            <a href="ai-assistant.html">
+                AI Assistant
+            </a>
+
+        </div>
+
+        <!-- LOGOUT BUTTON ADDED HERE -->
+        <button class="logout-btn" onclick="logout()">
+            Logout
+        </button>
+
+    </div>
+</nav>
+
+
+<main class="container">
+
+    <!-- HERO -->
+
+    <section class="hero">
+
+        <h1>
+            Welcome to Pet Care Planner 🐾
+        </h1>
+
+        <p id="welcomeText">
+            Keep your pets' health, care, vaccinations,
+            medicines, tasks and reminders organized in one place.
+        </p>
+
+    </section>
+
+
+    <!-- STATISTICS -->
+
+    <section class="section">
+
+        <div class="section-header">
+            <h2>📊 Overview</h2>
+        </div>
+
+        <div class="stats-grid">
+
+            <div class="stat-card">
+                <div class="stat-icon">🐾</div>
+                <div class="stat-number" id="petsCount">0</div>
+                <div class="stat-label">Pets</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">✅</div>
+                <div class="stat-number" id="tasksCount">0</div>
+                <div class="stat-label">Tasks</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">💉</div>
+                <div class="stat-number" id="vaccinationsCount">0</div>
+                <div class="stat-label">Vaccinations</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">🔔</div>
+                <div class="stat-number" id="remindersCount">0</div>
+                <div class="stat-label">Reminders</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">❤️</div>
+                <div class="stat-number" id="healthCount">0</div>
+                <div class="stat-label">Health Records</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">💊</div>
+                <div class="stat-number" id="medicinesCount">0</div>
+                <div class="stat-label">Medicines</div>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- QUICK ACTIONS -->
+
+    <section class="section">
+
+        <div class="section-header">
+            <h2>⚡ Quick Actions</h2>
+        </div>
+
+        <div class="quick-actions">
+
+            <a href="add-pet.html" class="quick-card">
+                <div class="quick-card-icon">🐾</div>
+                <h3>Add Pet</h3>
+                <p>Add a new pet to your planner.</p>
+            </a>
+
+            <a href="add-task.html" class="quick-card">
+                <div class="quick-card-icon">✅</div>
+                <h3>Add Task</h3>
+                <p>Create a care task for your pet.</p>
+            </a>
+
+            <a href="add-vaccination.html" class="quick-card">
+                <div class="quick-card-icon">💉</div>
+                <h3>Add Vaccination</h3>
+                <p>Track your pet's vaccinations.</p>
+            </a>
+
+            <a href="health.html" class="quick-card">
+                <div class="quick-card-icon">❤️</div>
+                <h3>Health</h3>
+                <p>Record your pet's health information.</p>
+            </a>
+
+            <a href="medicine.html" class="quick-card">
+                <div class="quick-card-icon">💊</div>
+                <h3>Medicine</h3>
+                <p>Manage medicines and treatment records.</p>
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- PET CARE SNAPSHOT -->
+
+    <section class="section">
+
+        <div class="section-header">
+
+            <h2>
+                🐶 Pet Care Snapshot
+            </h2>
+
+        </div>
+
+        <div id="petOverview">
+        </div>
+
+    </section>
+
+
+    <!-- MY PETS -->
+
+    <section class="section">
+
+        <div class="section-header">
+
+            <h2>
+                🐾 My Pets
+            </h2>
+
+            <a href="add-pet.html">
+                + Add Pet
+            </a>
+
+        </div>
+
+        <div id="petsList">
+        </div>
+
+    </section>
+
+
+    <!-- RECORDS -->
+
+    <section class="section">
+
+        <div class="section-header">
+
+            <h2>
+                📋 Recent Records
+            </h2>
+
+        </div>
+
+        <div class="records-grid">
+
+            <!-- TASKS -->
+
+            <div class="record-section">
+
+                <h3>
+                    ✅ Recent Tasks
+                </h3>
+
+                <div
+                    id="tasksList"
+                    class="record-list">
+                </div>
+
+            </div>
+
+
+            <!-- VACCINATIONS -->
+
+            <div class="record-section">
+
+                <h3>
+                    💉 Recent Vaccinations
+                </h3>
+
+                <div
+                    id="vaccinationsList"
+                    class="record-list">
+                </div>
+
+            </div>
+
+
+            <!-- REMINDERS -->
+
+            <div class="record-section">
+
+                <h3>
+                    🔔 Recent Reminders
+                </h3>
+
+                <div
+                    id="remindersList"
+                    class="record-list">
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- LOST PETS -->
+
+    <section class="section">
+
+        <div class="section-header">
+
+            <h2>
+                🚨 Lost Pet Reports
+            </h2>
+
+            <a href="add-lost-pet.html">
+                Report Lost Pet
+            </a>
+
+        </div>
+
+        <div id="lostPetsList">
+        </div>
+
+    </section>
+
+</main>
+
+
+<script>
+
+    /* =========================================================
+       SAFE LOCAL STORAGE HELPERS
+    ========================================================= */
+
+    function getStoredArray(key) {
+
+        try {
+
+            const data =
+                JSON.parse(
+                    localStorage.getItem(key) || "[]"
+                );
+
+            return Array.isArray(data)
+                ? data
+                : [];
+
+        } catch (error) {
+
+            console.error(
+                "Storage error:",
+                key,
+                error
+            );
+
+            return [];
+        }
+    }
+
+
+    function saveStoredArray(key, data) {
+
+        try {
+
+            localStorage.setItem(
+                key,
+                JSON.stringify(data)
+            );
+
+            return true;
+
+        } catch (error) {
+
+            console.error(
+                "Could not save:",
+                key,
+                error
+            );
+
+            return false;
+        }
+    }
+
+
+    /* =========================================================
+       HTML SAFETY
+    ========================================================= */
+
+    function escapeHTML(value) {
+
+        return String(value ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+
+    /* =========================================================
+       UNIQUE ID GENERATOR
+    ========================================================= */
+
+    function makeId(prefix) {
+
+        if (
+            window.crypto &&
+            typeof window.crypto.randomUUID === "function"
+        ) {
+
+            return `${prefix}_${window.crypto.randomUUID()}`;
+
+        }
+
+        return (
+            `${prefix}_` +
+            Date.now() +
+            "_" +
+            Math.random()
+                .toString(36)
+                .substring(2, 9)
+        );
+    }
+
+
+    /* =========================================================
+       PET EMOJI
+    ========================================================= */
+
+    function getPetEmoji(type) {
+
+        const value =
+            String(type || "").toLowerCase();
+
+        if (value.includes("cat")) {
+            return "🐱";
+        }
+
+        if (value.includes("rabbit")) {
+            return "🐰";
+        }
+
+        if (value.includes("bird")) {
+            return "🐦";
+        }
+
+        if (value.includes("fish")) {
+            return "🐟";
+        }
+
+        if (value.includes("hamster")) {
+            return "🐹";
+        }
+
+        return "🐶";
+    }
+
+
+    /* =========================================================
+       FIND PET
+    ========================================================= */
+
+    function findPetById(petId) {
+
+        const pets =
+            getStoredArray("pets");
+
+        return pets.find(
+            pet =>
+                String(pet.id) ===
+                String(petId)
+        );
+    }
+
+
+    /* =========================================================
+       REPAIR OLD VACCINATION RECORDS
+    ========================================================= */
+
+    function repairVaccinationIds() {
+
+        const vaccinations =
+            getStoredArray("vaccinations");
+
+        if (vaccinations.length === 0) {
+            return;
+        }
+
+        let changed = false;
+
+        const repaired =
+            vaccinations.map(
+                (record, index) => {
+
+                    if (
+                        !record.id ||
+                        String(record.id).trim() === ""
+                    ) {
+
+                        changed = true;
+
+                        return {
+                            ...record,
+                            id:
+                                makeId(
+                                    "vaccination"
+                                )
+                        };
+                    }
+
+                    return record;
+                }
+            );
+
+        if (changed) {
+
+            saveStoredArray(
+                "vaccinations",
+                repaired
+            );
+        }
+    }
+
+
+    /* =========================================================
+       DASHBOARD STATISTICS
+    ========================================================= */
+
+    function updateDashboardStats() {
+
+        const pets =
+            getStoredArray("pets");
+
+        const tasks =
+            getStoredArray("tasks");
+
+        const vaccinations =
+            getStoredArray("vaccinations");
+
+        const reminders =
+            getStoredArray("reminders");
+
+        const health =
+            getStoredArray("healthRecords");
+
+        const medicines =
+            getStoredArray("medicineRecords");
+
+
+        const petsCount =
+            document.getElementById(
+                "petsCount"
+            );
+
+        const tasksCount =
+            document.getElementById(
+                "tasksCount"
+            );
+
+        const vaccinationsCount =
+            document.getElementById(
+                "vaccinationsCount"
+            );
+
+        const remindersCount =
+            document.getElementById(
+                "remindersCount"
+            );
+
+        const healthCount =
+            document.getElementById(
+                "healthCount"
+            );
+
+        const medicinesCount =
+            document.getElementById(
+                "medicinesCount"
+            );
+
+
+        if (petsCount) {
+            petsCount.textContent =
+                pets.length;
+        }
+
+        if (tasksCount) {
+            tasksCount.textContent =
+                tasks.length;
+        }
+
+        if (vaccinationsCount) {
+            vaccinationsCount.textContent =
+                vaccinations.length;
+        }
+
+        if (remindersCount) {
+            remindersCount.textContent =
+                reminders.length;
+        }
+
+        if (healthCount) {
+            healthCount.textContent =
+                health.length;
+        }
+
+        if (medicinesCount) {
+            medicinesCount.textContent =
+                medicines.length;
+        }
+    }
+
+
+    /* =========================================================
+       RECORD BELONGS TO PET
+    ========================================================= */
+
+    function recordBelongsToPet(
+        record,
+        pet
+    ) {
+
+        if (!record || !pet) {
+            return false;
+        }
+
+
+        if (record.petId != null) {
+
+            return (
+                String(record.petId) ===
+                String(pet.id)
+            );
+        }
+
+
+        const possibleName =
+            record.pet ||
+            record.petName ||
+            record.pet_name;
+
+
+        if (possibleName) {
+
+            return (
+                String(possibleName)
+                    .toLowerCase() ===
+                String(pet.name || "")
+                    .toLowerCase()
+            );
+        }
+
+
+        return false;
+    }
+
+
+    /* =========================================================
+       PET RECORD COUNTS
+    ========================================================= */
+
+    function getPetRecordCounts(pet) {
+
+        const tasks =
+            getStoredArray("tasks")
+                .filter(
+                    record =>
+                        recordBelongsToPet(
+                            record,
+                            pet
+                        )
+                );
+
+
+        const vaccinations =
+            getStoredArray("vaccinations")
+                .filter(
+                    record =>
+                        recordBelongsToPet(
+                            record,
+                            pet
+                        )
+                );
+
+
+        const reminders =
+            getStoredArray("reminders")
+                .filter(
+                    record =>
+                        recordBelongsToPet(
+                            record,
+                            pet
+                        )
+                );
+
+
+        const health =
+            getStoredArray("healthRecords")
+                .filter(
+                    record =>
+                        recordBelongsToPet(
+                            record,
+                            pet
+                        )
+                );
+
+
+        const care =
+            getStoredArray("careRecords")
+                .filter(
+                    record =>
+                        recordBelongsToPet(
+                            record,
+                            pet
+                        )
+                );
+
+
+        const medicines =
+            getStoredArray("medicineRecords")
+                .filter(
+                    record =>
+                        recordBelongsToPet(
+                            record,
+                            pet
+                        )
+                );
+
+
+        return {
+            tasks: tasks.length,
+            vaccinations: vaccinations.length,
+            reminders: reminders.length,
+            health: health.length,
+            care: care.length,
+            medicines: medicines.length
+        };
+    }
+
+
+    /* =========================================================
+       PET OVERVIEW
+    ========================================================= */
+
+    function displayPetOverview() {
+
+        const container =
+            document.getElementById(
+                "petOverview"
+            );
+
+        if (!container) {
+            return;
+        }
+
+
+        const pets =
+            getStoredArray("pets");
+
+
+        if (pets.length === 0) {
+
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">
+                        🐾
+                    </div>
+
+                    <p>
+                        Add a pet to see their care overview.
+                    </p>
+
+                    <a href="add-pet.html">
+                        Add Your First Pet
+                    </a>
+                </div>
+            `;
+
+            return;
+        }
+
+
+        container.innerHTML = `
+            <div class="pet-overview-grid">
+
+                ${pets.map(pet => {
+
+                    const counts =
+                        getPetRecordCounts(
+                            pet
+                        );
+
+                    return `
+                        <div class="pet-overview-card">
+
+                            <div class="pet-overview-header">
+
+                                <div class="pet-overview-icon">
+                                    ${getPetEmoji(pet.type)}
+                                </div>
+
+                                <div>
+
+                                    <h3>
+                                        ${escapeHTML(
+                                            pet.name ||
+                                            "Unnamed Pet"
+                                        )}
+                                    </h3>
+
+                                    <p>
+                                        ${escapeHTML(
+                                            pet.type ||
+                                            "Pet"
+                                        )}
+
+                                        ${
+                                            pet.breed
+                                                ? ` • ${escapeHTML(pet.breed)}`
+                                                : ""
+                                        }
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="pet-count-grid">
+
+                                <div class="pet-count">
+                                    <strong>
+                                        ${counts.tasks}
+                                    </strong>
+                                    <span>
+                                        Tasks
+                                    </span>
+                                </div>
+
+
+                                <div class="pet-count">
+                                    <strong>
+                                        ${counts.vaccinations}
+                                    </strong>
+                                    <span>
+                                        Vaccines
+                                    </span>
+                                </div>
+
+
+                                <div class="pet-count">
+                                    <strong>
+                                        ${counts.reminders}
+                                    </strong>
+                                    <span>
+                                        Reminders
+                                    </span>
+                                </div>
+
+
+                                <div class="pet-count">
+                                    <strong>
+                                        ${counts.health}
+                                    </strong>
+                                    <span>
+                                        Health
+                                    </span>
+                                </div>
+
+
+                                <div class="pet-count">
+                                    <strong>
+                                        ${counts.care}
+                                    </strong>
+                                    <span>
+                                        Care
+                                    </span>
+                                </div>
+
+
+                                <div class="pet-count">
+                                    <strong>
+                                        ${counts.medicines}
+                                    </strong>
+                                    <span>
+                                        Medicines
+                                    </span>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    `;
+
+                }).join("")}
+
+            </div>
+        `;
+    }
+
+
+    /* =========================================================
+       DISPLAY PETS
+    ========================================================= */
+
+    function displayPets() {
+
+        const container =
+            document.getElementById(
+                "petsList"
+            );
+
+        if (!container) {
+            return;
+        }
+
+
+        const pets =
+            getStoredArray("pets");
+
+
+        if (pets.length === 0) {
+
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">
+                        🐾
+                    </div>
+
+                    <p>
+                        No pets added yet.
+                    </p>
+
+                    <a href="add-pet.html">
+                        Add Pet
+                    </a>
+                </div>
+            `;
+
+            return;
+        }
+
+
+        container.innerHTML = `
+            <div class="pets-grid">
+
+                ${pets.map(pet => {
+
+                    return `
+                        <div class="pet-card">
+
+                            <div class="pet-card-top">
+
+                                <div class="pet-card-icon">
+                                    ${getPetEmoji(pet.type)}
+                                </div>
+
+                                <div>
+
+                                    <h3>
+                                        ${escapeHTML(
+                                            pet.name ||
+                                            "Unnamed Pet"
+                                        )}
+                                    </h3>
+
+                                    <p>
+                                        ${escapeHTML(
+                                            pet.type ||
+                                            "Pet"
+                                        )}
+
+                                        ${
+                                            pet.breed
+                                                ? ` • ${escapeHTML(pet.breed)}`
+                                                : ""
+                                        }
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            <button
+                                class="pet-delete"
+                                onclick="deletePetByEncodedId('${encodeURIComponent(String(pet.id))}')"
+                            >
+                                Delete Pet
+                            </button>
+
+                        </div>
+                    `;
+
+                }).join("")}
+
+            </div>
+        `;
+    }
+
+
+    /* =========================================================
+       DELETE PET
+    ========================================================= */
+
+    function deletePetByEncodedId(
+        encodedId
+    ) {
+
+        const petId =
+            decodeURIComponent(
+                encodedId
+            );
+
+        deletePet(petId);
+    }
+
+
+    function deletePet(petId) {
+
+        const pets =
+            getStoredArray("pets");
+
+        const pet =
+            pets.find(
+                item =>
+                    String(item.id) ===
+                    String(petId)
+            );
+
+
+        if (!pet) {
+            return;
+        }
+
+
+        const confirmed =
+            confirm(
+                `Delete ${pet.name || "this pet"}?`
+            );
+
+
+        if (!confirmed) {
+            return;
+        }
+
+
+        const updatedPets =
+            pets.filter(
+                item =>
+                    String(item.id) !==
+                    String(petId)
+            );
+
+
+        saveStoredArray(
+            "pets",
+            updatedPets
+        );
+
+
+        const health =
+            getStoredArray(
+                "healthRecords"
+            );
+
+        saveStoredArray(
+            "healthRecords",
+            health.filter(
+                record =>
+                    String(record.petId) !==
+                    String(petId)
+            )
+        );
+
+
+        const care =
+            getStoredArray(
+                "careRecords"
+            );
+
+        saveStoredArray(
+            "careRecords",
+            care.filter(
+                record =>
+                    String(record.petId) !==
+                    String(petId)
+            )
+        );
+
+
+        const medicines =
+            getStoredArray(
+                "medicineRecords"
+            );
+
+        saveStoredArray(
+            "medicineRecords",
+            medicines.filter(
+                record =>
+                    String(record.petId) !==
+                    String(petId)
+            )
+        );
+
+
+        displayPets();
+        displayPetOverview();
+        updateDashboardStats();
+    }
+
+
+    /* =========================================================
+       DISPLAY TASKS
+    ========================================================= */
+
+    function displayTasks() {
+
+        const container =
+            document.getElementById(
+                "tasksList"
+            );
+
+        if (!container) {
+            return;
+        }
+
+
+        const tasks =
+            getStoredArray("tasks");
+
+
+        if (tasks.length === 0) {
+
+            container.innerHTML = `
+                <div class="empty-state">
+
+                    <div class="empty-state-icon">
+                        ✅
+                    </div>
+
+                    <p>
+                        No tasks yet.
+                    </p>
+
+                    <a href="add-task.html">
+                        Add Task
+                    </a>
+
+                </div>
+            `;
+
+            return;
+        }
+
+
+        const recent =
+            tasks
+                .slice(-5)
+                .reverse();
+
+
+        container.innerHTML =
+            recent.map(task => {
+
+                const title =
+                    escapeHTML(
+                        task.title ||
+                        task.task ||
+                        task.name ||
+                        "Task"
+                    );
+
+
+                const date =
+                    escapeHTML(
+                        task.date ||
+                        ""
+                    );
+
+
+                const pet =
+                    escapeHTML(
+                        task.petName ||
+                        task.pet ||
+                        ""
+                    );
+
+
+                return `
+                    <div class="record-item">
+
+                        <strong>
+                            ✅ ${title}
+                        </strong>
+
+                        ${
+                            date
+                                ? `<span>Date: ${date}</span>`
+                                : ""
+                        }
+
+                        ${
+                            pet
+                                ? `<span>Pet: ${pet}</span>`
+                                : ""
+                        }
+
+                        <button
+                            class="delete-record-button"
+                            onclick="deleteTaskByEncodedId('${encodeURIComponent(String(task.id))}')"
+                        >
+                            Delete
+                        </button>
+
+                    </div>
+                `;
+
+            }).join("");
+    }
+
+
+    /* =========================================================
+       DELETE TASK
+    ========================================================= */
+
+    function deleteTaskByEncodedId(
+        encodedId
+    ) {
+
+        const taskId =
+            decodeURIComponent(
+                encodedId
+            );
+
+
+        const confirmed =
+            confirm(
+                "Delete this task?"
+            );
+
+
+        if (!confirmed) {
+            return;
+        }
+
+
+        const tasks =
+            getStoredArray("tasks");
+
+
+        const updatedTasks =
+            tasks.filter(
+                task =>
+                    String(task.id) !==
+                    String(taskId)
+            );
+
+
+        saveStoredArray(
+            "tasks",
+            updatedTasks
+        );
+
+
+        displayTasks();
+        updateDashboardStats();
+        displayPetOverview();
+    }
+
+
+    /* =========================================================
+       DISPLAY VACCINATIONS
+    ========================================================= */
+
+    function displayVaccinations() {
+
+        const container =
+            document.getElementById(
+                "vaccinationsList"
+            );
+
+        if (!container) {
+            return;
+        }
+
+
+        repairVaccinationIds();
+
+
+        const vaccinations =
+            getStoredArray(
+                "vaccinations"
+            );
+
+
+        if (vaccinations.length === 0) {
+
+            container.innerHTML = `
+                <div class="empty-state">
+
+                    <div class="empty-state-icon">
+                        💉
+                    </div>
+
+                    <p>
+                        No vaccination records yet.
+                    </p>
+
+                    <a href="add-vaccination.html">
+                        Add Vaccination
+                    </a>
+
+                </div>
+            `;
+
+            return;
+        }
+
+
+        const recent =
+            vaccinations
+                .slice(-5)
+                .reverse();
+
+
+        container.innerHTML =
+            recent.map(record => {
+
+                const name =
+                    escapeHTML(
+                        record.vaccine ||
+                        record.name ||
+                        record.vaccination ||
+                        record.vaccineName ||
+                        "Vaccination"
+                    );
+
+
+                const date =
+                    escapeHTML(
+                        record.date ||
+                        record.vaccinationDate ||
+                        ""
+                    );
+
+
+                const pet =
+                    escapeHTML(
+                        record.petName ||
+                        record.pet ||
+                        ""
+                    );
+
+
+                return `
+                    <div class="record-item">
+
+                        <strong>
+                            💉 ${name}
+                        </strong>
+
+                        ${
+                            date
+                                ? `<span>Date: ${date}</span>`
+                                : `<span>Date not specified</span>`
+                        }
+
+                        ${
+                            pet
+                                ? `<span>Pet: ${pet}</span>`
+                                : ""
+                        }
+
+
+                        <button
+                            class="delete-record-button"
+                            onclick="deleteVaccinationByEncodedId('${encodeURIComponent(String(record.id))}')"
+                        >
+                            Delete
+                        </button>
+
+                    </div>
+                `;
+
+            }).join("");
+    }
+
+
+    /* =========================================================
+       DELETE VACCINATION
+    ========================================================= */
+
+    function deleteVaccinationByEncodedId(
+        encodedId
+    ) {
+
+        const vaccinationId =
+            decodeURIComponent(
+                encodedId
+            );
+
+
+        const confirmed =
+            confirm(
+                "Delete this vaccination record?"
+            );
+
+
+        if (!confirmed) {
+            return;
+        }
+
+
+        const vaccinations =
+            getStoredArray(
+                "vaccinations"
+            );
+
+
+        const updatedVaccinations =
+            vaccinations.filter(
+                vaccination =>
+                    String(vaccination.id) !==
+                    String(vaccinationId)
+            );
+
+
+        saveStoredArray(
+            "vaccinations",
+            updatedVaccinations
+        );
+
+
+        displayVaccinations();
+        updateDashboardStats();
+        displayPetOverview();
+    }
+
+
+    /* =========================================================
+       DISPLAY REMINDERS
+    ========================================================= */
+
+    function displayReminders() {
+
+        const container =
+            document.getElementById(
+                "remindersList"
+            );
+
+        if (!container) {
+            return;
+        }
+
+
+        const reminders =
+            getStoredArray("reminders");
+
+
+        if (reminders.length === 0) {
+
+            container.innerHTML = `
+                <div class="empty-state">
+
+                    <div class="empty-state-icon">
+                        🔔
+                    </div>
+
+                    <p>
+                        No reminders yet.
+                    </p>
+
+                    <a href="add-reminder.html">
+                        Add Reminder
+                    </a>
+
+                </div>
+            `;
+
+            return;
+        }
+
+
+        const recent =
+            reminders
+                .slice(-5)
+                .reverse();
+
+
+        container.innerHTML =
+            recent.map(reminder => {
+
+                const title =
+                    escapeHTML(
+                        reminder.title ||
+                        reminder.reminder ||
+                        reminder.name ||
+                        "Reminder"
+                    );
+
+
+                const date =
+                    escapeHTML(
+                        reminder.date ||
+                        ""
+                    );
+
+
+                const time =
+                    escapeHTML(
+                        reminder.time ||
+                        ""
+                    );
+
+
+                const pet =
+                    escapeHTML(
+                        reminder.petName ||
+                        reminder.pet ||
+                        ""
+                    );
+
+
+                return `
+                    <div class="record-item">
+
+                        <strong>
+                            🔔 ${title}
+                        </strong>
+
+                        ${
+                            date
+                                ? `<span>Date: ${date}</span>`
+                                : ""
+                        }
+
+                        ${
+                            time
+                                ? `<span>Time: ${time}</span>`
+                                : ""
+                        }
+
+                        ${
+                            pet
+                                ? `<span>Pet: ${pet}</span>`
+                                : ""
+                        }
+
+
+                        <button
+                            class="delete-record-button"
+                            onclick="deleteReminderByEncodedId('${encodeURIComponent(String(reminder.id))}')"
+                        >
+                            Delete
+                        </button>
+
+                    </div>
+                `;
+
+            }).join("");
+    }
+
+
+    /* =========================================================
+       DELETE REMINDER
+    ========================================================= */
+
+    function deleteReminderByEncodedId(
+        encodedId
+    ) {
+
+        const reminderId =
+            decodeURIComponent(
+                encodedId
+            );
+
+
+        const confirmed =
+            confirm(
+                "Delete this reminder?"
+            );
+
+
+        if (!confirmed) {
+            return;
+        }
+
+
+        const reminders =
+            getStoredArray(
+                "reminders"
+            );
+
+
+        const updatedReminders =
+            reminders.filter(
+                reminder =>
+                    String(reminder.id) !==
+                    String(reminderId)
+            );
+
+
+        saveStoredArray(
+            "reminders",
+            updatedReminders
+        );
+
+
+        displayReminders();
+        updateDashboardStats();
+        displayPetOverview();
+    }
+
+
+    /* =========================================================
+       DISPLAY LOST PETS
+    ========================================================= */
+
+    function displayLostPets() {
+
+        const container =
+            document.getElementById(
+                "lostPetsList"
+            );
+
+        if (!container) {
+            return;
+        }
+
+
+        const lostPets =
+            getStoredArray(
+                "lostPets"
+            );
+
+
+        if (lostPets.length === 0) {
+
+            container.innerHTML = `
+                <div class="empty-state">
+
+                    <div class="empty-state-icon">
+                        🐾
+                    </div>
+
+                    <p>
+                        No lost pet reports.
+                    </p>
+
+                    <a href="add-lost-pet.html">
+                        Report Lost Pet
+                    </a>
+
+                </div>
+            `;
+
+            return;
+        }
+
+
+        container.innerHTML =
+            lostPets.map(record => {
+
+                const name =
+                    escapeHTML(
+                        record.petName ||
+                        record.name ||
+                        "Lost Pet"
+                    );
+
+
+                const location =
+                    escapeHTML(
+                        record.location ||
+                        ""
+                    );
+
+
+                const date =
+                    escapeHTML(
+                        record.date ||
+                        ""
+                    );
+
+                const type =
+                    escapeHTML(
+                        record.petType ||
+                        record.type ||
+                        ""
+                    );
+
+                const breed =
+                    escapeHTML(
+                        record.breed ||
+                        ""
+                    );
+
+                const contact =
+                    escapeHTML(
+                        record.contact ||
+                        record.contactNumber ||
+                        record.phone ||
+                        ""
+                    );
+
+                const details =
+                    escapeHTML(
+                        record.details ||
+                        record.description ||
+                        ""
+                    );
+
+                const encodedId =
+                    encodeURIComponent(
+                        String(record.id || makeId("lost"))
+                    );
+
+                return `
+                    <div class="lost-card">
+
+                        <strong>
+                            🚨 ${name}
+                        </strong>
+
+                        ${
+                            type
+                                ? `<span>🐾 Type: ${type}</span>`
+                                : ""
+                        }
+
+                        ${
+                            breed
+                                ? `<span>🐶 Breed: ${breed}</span>`
+                                : ""
+                        }
+
+                        ${
+                            location
+                                ? `<span>📍 ${location}</span>`
+                                : ""
+                        }
+
+                        ${
+                            date
+                                ? `<span>📅 ${date}</span>`
+                                : ""
+                        }
+
+                        ${
+                            contact
+                                ? `<span>📞 Contact: ${contact}</span>`
+                                : ""
+                        }
+
+                        ${
+                            details
+                                ? `<span>📝 ${details}</span>`
+                                : ""
+                        }
+
+                        <div class="lost-actions">
+
+                            <button
+                                class="lost-action-button whatsapp-button"
+                                onclick="shareLostPetWhatsApp('${encodedId}')"
+                            >
+                                📱 WhatsApp
+                            </button>
+
+                            <button
+                                class="lost-action-button copy-button"
+                                onclick="copyLostPetDetails('${encodedId}')"
+                            >
+                                📋 Copy Details
+                            </button>
+
+                            ${
+                                contact
+                                    ? `<button class="lost-action-button call-button" onclick="callLostPet('${encodedId}')">📞 Call</button>`
+                                    : ""
+                            }
+
+                            <button
+                                class="lost-action-button found-button"
+                                onclick="markAsFoundByEncodedId('${encodedId}')"
+                            >
+                                ✅ Mark as Found
+                            </button>
+
+                            <button
+                                class="lost-action-button lost-delete-button"
+                                onclick="deleteLostPetByEncodedId('${encodedId}')"
+                            >
+                                🗑️ Delete
+                            </button>
+
+                        </div>
+
+                    </div>
+                `;
+
+            }).join("");
+    }
+
+
+    /* =========================================================
+       LOST PET SHARING / COPY / CALL / DELETE
+    ========================================================= */
+
+    function getLostPetById(id) {
+
+        const lostPets = getStoredArray("lostPets");
+
+        return lostPets.find(
+            record => String(record.id) === String(id)
+        );
+    }
+
+
+    function getLostPetShareText(record) {
+
+        if (!record) {
+            return "";
+        }
+
+        const name = record.petName || record.name || "Lost Pet";
+        const type = record.petType || record.type || "";
+        const breed = record.breed || "";
+        const location = record.location || "";
+        const date = record.date || "";
+        const contact = record.contact || record.contactNumber || record.phone || "";
+        const details = record.details || record.description || "";
+
+        const lines = [
+            "🐾 LOST PET ALERT",
+            `Name: ${name}`,
+            type ? `Type: ${type}` : "",
+            breed ? `Breed: ${breed}` : "",
+            location ? `Last seen: ${location}` : "",
+            date ? `Date: ${date}` : "",
+            contact ? `Contact: ${contact}` : "",
+            details ? `Details: ${details}` : "",
+            "",
+            "Please share this alert and contact the owner if you have seen this pet."
+        ];
+
+        return lines.filter(Boolean).join("\n");
+    }
+
+
+    function shareLostPetWhatsApp(encodedId) {
+
+        const id = decodeURIComponent(encodedId);
+        const record = getLostPetById(id);
+
+        if (!record) {
+            alert("Lost pet report not found.");
+            return;
+        }
+
+        const message = getLostPetShareText(record);
+        const whatsappUrl =
+            "https://wa.me/?text=" +
+            encodeURIComponent(message);
+
+        window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+    }
+
+
+    async function copyLostPetDetails(encodedId) {
+
+        const id = decodeURIComponent(encodedId);
+        const record = getLostPetById(id);
+
+        if (!record) {
+            alert("Lost pet report not found.");
+            return;
+        }
+
+        const message = getLostPetShareText(record);
+
+        try {
+            if (navigator.clipboard && window.isSecureContext) {
+                await navigator.clipboard.writeText(message);
+            } else {
+                const textArea = document.createElement("textarea");
+                textArea.value = message;
+                textArea.style.position = "fixed";
+                textArea.style.left = "-9999px";
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                document.execCommand("copy");
+                textArea.remove();
+            }
+
+            alert("Lost pet details copied to clipboard.");
+        } catch (error) {
+            console.error("Copy failed:", error);
+            alert("Could not copy automatically. Please select and copy the details manually.");
+        }
+    }
+
+
+    function callLostPet(encodedId) {
+
+        const id = decodeURIComponent(encodedId);
+        const record = getLostPetById(id);
+
+        if (!record) {
+            alert("Lost pet report not found.");
+            return;
+        }
+
+        const contact =
+            record.contact ||
+            record.contactNumber ||
+            record.phone ||
+            "";
+
+        if (!contact) {
+            alert("No contact number is available for this report.");
+            return;
+        }
+
+        window.location.href = "tel:" + contact.replace(/[^0-9+]/g, "");
+    }
+
+
+    function deleteLostPetByEncodedId(encodedId) {
+
+        const id = decodeURIComponent(encodedId);
+        const record = getLostPetById(id);
+
+        if (!record) {
+            return;
+        }
+
+        const confirmed = confirm(
+            `Delete the lost pet report for ${record.petName || record.name || "this pet"}?`
+        );
+
+        if (!confirmed) {
+            return;
+        }
+
+        const lostPets = getStoredArray("lostPets");
+        const updated = lostPets.filter(
+            item => String(item.id) !== String(id)
+        );
+
+        if (saveStoredArray("lostPets", updated)) {
+            displayLostPets();
+        }
+    }
+
+
+    /* =========================================================
+       MARK LOST PET AS FOUND
+    ========================================================= */
+
+    function markAsFoundByEncodedId(
+        encodedId
+    ) {
+
+        const id =
+            decodeURIComponent(
+                encodedId
+            );
+
+        markAsFound(id);
+    }
+
+
+    function markAsFound(id) {
+
+        const confirmed =
+            confirm(
+                "Mark this pet as found?"
+            );
+
+
+        if (!confirmed) {
+            return;
+        }
+
+
+        const lostPets =
+            getStoredArray(
+                "lostPets"
+            );
+
+
+        const updated =
+            lostPets.filter(
+                record =>
+                    String(record.id) !==
+                    String(id)
+            );
+
+
+        saveStoredArray(
+            "lostPets",
+            updated
+        );
+
+
+        displayLostPets();
+    }
+
+
+    /* =========================================================
+       LOAD USER PROFILE
+    ========================================================= */
+
+    function loadProfile() {
+
+        const userName =
+            localStorage.getItem(
+                "userName"
+            );
+
+
+        const welcomeText =
+            document.getElementById(
+                "welcomeText"
+            );
+
+
+        if (
+            welcomeText &&
+            userName
+        ) {
+
+            welcomeText.textContent =
+                `Welcome back, ${userName}! Keep your pets' health, care, vaccinations, medicines, tasks and reminders organized in one place.`;
+        }
+    }
+
+
+    /* =========================================================
+       LOGOUT FUNCTION
+    ========================================================= */
+
+    function logout() {
+        localStorage.removeItem("loggedIn");
+        localStorage.removeItem("userId");
+        localStorage.removeItem("userName");
+        localStorage.removeItem("userEmail");
+        localStorage.removeItem("userPassword");
+        window.location.href = "/";
+    }
+
+
+    /* =========================================================
+       INITIALIZE DASHBOARD
+    ========================================================= */
+
+    function initDashboard() {
+
+        repairVaccinationIds();
+
+        loadProfile();
+
+        updateDashboardStats();
+
+        displayPetOverview();
+
+        displayPets();
+
+        displayTasks();
+
+        displayVaccinations();
+
+        displayReminders();
+
+        displayLostPets();
+    }
+
+
+    /* =========================================================
+       START
+    ========================================================= */
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        initDashboard
+    );
+
+</script>
+
+</body>
+</html>

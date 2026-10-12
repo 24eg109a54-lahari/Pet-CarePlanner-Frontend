@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Add Vaccination - Pet Care Planner</title>
+
+    <style>
+
+        :root {
+            --teal: #4fa6a8;
+            --dark-teal: #28777a;
+            --mint: #bfe8df;
+            --soft-mint: #eaf8f5;
+            --sky: #d8eff4;
+            --blue: #6caec4;
+            --lavender: #e8def5;
+            --purple: #8668a9;
+            --cream: #fffaf0;
+            --white: #ffffff;
+            --text: #304b53;
+            --muted: #7b8d92;
+            --border: #dce9e8;
+            --danger: #d66b6b;
+            --shadow: 0 10px 28px rgba(35, 93, 103, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background:
+                linear-gradient(
+                    135deg,
+                    #f4fbfa,
+                    #eef9fb,
+                    #faf7fd
+                );
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            font-family: inherit;
+        }
+
+        /* NAVBAR */
+
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-container {
+            max-width: 1250px;
+            margin: auto;
+            padding: 15px 20px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 20px;
+        }
+
+        .logo {
+            color: var(--dark-teal);
+            font-size: 19px;
+            font-weight: 900;
+            white-space: nowrap;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: flex-end;
+        }
+
+        .nav-links a {
+            padding: 8px 10px;
+            border-radius: 10px;
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 700;
+            transition: 0.2s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: var(--soft-mint);
+            color: var(--dark-teal);
+        }
+
+        /* CONTAINER */
+
+        .container {
+            width: min(900px, calc(100% - 30px));
+            margin: auto;
+            padding: 35px 0 60px;
+        }
+
+        /* HERO */
+
+        .hero {
+            padding: 32px;
+            border-radius: 27px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(191, 232, 223, 0.9),
+                    rgba(216, 239, 244, 0.95),
+                    rgba(232, 222, 245, 0.9)
+                );
+
+            box-shadow: var(--shadow);
+            margin-bottom: 25px;
+        }
+
+        .hero h1 {
+            color: #294c54;
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .hero p {
+            color: #5d767d;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        /* FORM CARD */
+
+        .form-card {
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 28px;
+            box-shadow: var(--shadow);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            color: #3d5960;
+            font-size: 11px;
+            font-weight: 800;
+            margin-bottom: 7px;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 13px;
+
+            border: 1px solid var(--border);
+            border-radius: 12px;
+
+            background: #fbfefe;
+            color: var(--text);
+
+            font-size: 12px;
+            outline: none;
+
+            transition: 0.2s ease;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: var(--teal);
+            box-shadow:
+                0 0 0 3px
+                rgba(79, 166, 168, 0.12);
+        }
+
+        textarea {
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        .required {
+            color: var(--danger);
+        }
+
+        /* PET EMPTY */
+
+        .no-pets {
+            padding: 20px;
+            border-radius: 15px;
+            background: #fffaf0;
+            border: 1px solid #f0dfb9;
+            color: #75633e;
+            font-size: 11px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .no-pets a {
+            display: inline-block;
+            margin-top: 10px;
+            background: var(--soft-mint);
+            color: var(--dark-teal);
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-weight: 800;
+        }
+
+        /* BUTTONS */
+
+        .button-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 22px;
+        }
+
+        .submit-button {
+            border: none;
+            border-radius: 12px;
+            padding: 12px 18px;
+
+            background: var(--dark-teal);
+            color: white;
+
+            font-size: 12px;
+            font-weight: 800;
+
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .submit-button:hover {
+            background: var(--teal);
+            transform: translateY(-1px);
+        }
+
+        .cancel-button {
+            border: none;
+            border-radius: 12px;
+            padding: 12px 18px;
+
+            background: #f1f5f5;
+            color: #60767b;
+
+            font-size: 12px;
+            font-weight: 800;
+
+            cursor: pointer;
+        }
+
+        .message {
+            display: none;
+            margin-top: 18px;
+            padding: 12px 14px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .message.success {
+            display: block;
+            background: var(--soft-mint);
+            color: var(--dark-teal);
+        }
+
+        .message.error {
+            display: block;
+            background: #fff0f0;
+            color: var(--danger);
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 750px) {
+
+            .nav-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .nav-links {
+                justify-content: flex-start;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: auto;
+            }
+
+        }
+
+        @media (max-width: 480px) {
+
+            .container {
+                width: calc(100% - 20px);
+            }
+
+            .hero,
+            .form-card {
+                padding: 20px;
+            }
+
+            .hero h1 {
+                font-size: 25px;
+            }
+
+            .button-row {
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- NAVIGATION -->
+
+<nav class="navbar">
+
+    <div class="nav-container">
+
+        <a
+            href="profile.html"
+            class="logo"
+        >
+            🐾 Pet Care Planner
+        </a>
+
+
+        <div class="nav-links">
+
+            <a href="profile.html">
+                Dashboard
+            </a>
+
+            <a href="add-pet.html">
+                Add Pet
+            </a>
+
+            <a href="add-task.html">
+                Tasks
+            </a>
+
+            <a
+                href="add-vaccination.html"
+                class="active"
+            >
+                Vaccinations
+            </a>
+
+            <a href="add-reminder.html">
+                Reminders
+            </a>
+
+            <a href="add-lost-pet.html">
+                Lost Pet
+            </a>
+
+            <a href="breed-info.html">
+                Breed Info
+            </a>
+
+            <a href="health.html">
+                Health
+            </a>
+
+            <a href="care.html">
+                Care
+            </a>
+
+            <a href="medicine.html">
+                Medicine
+            </a>
+
+            <a href="ai-assistant.html">
+                AI Assistant
+            </a>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+<main class="container">
+
+
+    <!-- HERO -->
+
+    <section class="hero">
+
+        <h1>
+            💉 Add Vaccination
+        </h1>
+
+        <p>
+            Keep track of your pet's vaccination
+            history and important vaccine dates.
+        </p>
+
+    </section>
+
+
+    <!-- FORM -->
+
+    <section class="form-card">
+
+        <div
+            id="noPetsMessage"
+            class="no-pets"
+            style="display:none;"
+        >
+
+            You need to add a pet before
+            creating a vaccination record.
+
+            <br>
+
+            <a href="add-pet.html">
+                Add a Pet
+            </a>
+
+        </div>
+
+
+        <form id="vaccinationForm">
+
+
+            <div class="form-grid">
+
+
+                <!-- PET -->
+
+                <div class="form-group">
+
+                    <label for="petId">
+                        Pet <span class="required">*</span>
+                    </label>
+
+                    <select
+                        id="petId"
+                        required
+                    >
+
+                        <option value="">
+                            Select a pet
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- VACCINE -->
+
+                <div class="form-group">
+
+                    <label for="vaccine">
+                        Vaccine Name
+                        <span class="required">*</span>
+                    </label>
+
+                    <input
+                        type="text"
+                        id="vaccine"
+                        placeholder="e.g. Rabies"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- DATE -->
+
+                <div class="form-group">
+
+                    <label for="date">
+                        Vaccination Date
+                        <span class="required">*</span>
+                    </label>
+
+                    <input
+                        type="date"
+                        id="date"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- NEXT DUE -->
+
+                <div class="form-group">
+
+                    <label for="nextDueDate">
+                        Next Due Date
+                    </label>
+
+                    <input
+                        type="date"
+                        id="nextDueDate"
+                    >
+
+                </div>
+
+
+                <!-- VETERINARIAN -->
+
+                <div class="form-group">
+
+                    <label for="veterinarian">
+                        Veterinarian
+                    </label>
+
+                    <input
+                        type="text"
+                        id="veterinarian"
+                        placeholder="Veterinarian name"
+                    >
+
+                </div>
+
+
+                <!-- CLINIC -->
+
+                <div class="form-group">
+
+                    <label for="clinic">
+                        Clinic
+                    </label>
+
+                    <input
+                        type="text"
+                        id="clinic"
+                        placeholder="Clinic name"
+                    >
+
+                </div>
+
+
+                <!-- NOTES -->
+
+                <div class="form-group full">
+
+                    <label for="notes">
+                        Notes
+                    </label>
+
+                    <textarea
+                        id="notes"
+                        placeholder="Additional vaccination notes..."
+                    ></textarea>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="button-row">
+
+                <button
+                    type="submit"
+                    class="submit-button"
+                >
+                    Save Vaccination
+                </button>
+
+                <button
+                    type="button"
+                    class="cancel-button"
+                    onclick="window.location.href='profile.html'"
+                >
+                    Cancel
+                </button>
+
+            </div>
+
+
+            <div
+                id="message"
+                class="message"
+            ></div>
+
+
+        </form>
+
+    </section>
+
+</main>
+
+
+<script>
+
+    /* =========================================================
+       STORAGE
+    ========================================================= */
+
+    function getStoredArray(key) {
+
+        try {
+
+            const data =
+                JSON.parse(
+                    localStorage.getItem(key) || "[]"
+                );
+
+            return Array.isArray(data)
+                ? data
+                : [];
+
+        } catch (error) {
+
+            console.error(
+                "Storage error:",
+                key,
+                error
+            );
+
+            return [];
+        }
+    }
+
+
+    function saveStoredArray(
+        key,
+        data
+    ) {
+
+        try {
+
+            localStorage.setItem(
+                key,
+                JSON.stringify(data)
+            );
+
+            return true;
+
+        } catch (error) {
+
+            console.error(
+                "Could not save:",
+                key,
+                error
+            );
+
+            return false;
+        }
+    }
+
+
+    /* =========================================================
+       UNIQUE ID
+    ========================================================= */
+
+    function makeId(prefix) {
+
+        if (
+            window.crypto &&
+            typeof window.crypto.randomUUID ===
+                "function"
+        ) {
+
+            return (
+                prefix +
+                "_" +
+                window.crypto.randomUUID()
+            );
+        }
+
+
+        return (
+            prefix +
+            "_" +
+            Date.now() +
+            "_" +
+            Math.random()
+                .toString(36)
+                .substring(2, 9)
+        );
+    }
+
+
+    /* =========================================================
+       LOAD PETS
+    ========================================================= */
+
+    function loadPets() {
+
+        const pets =
+            getStoredArray("pets");
+
+
+        const petSelect =
+            document.getElementById(
+                "petId"
+            );
+
+
+        const noPetsMessage =
+            document.getElementById(
+                "noPetsMessage"
+            );
+
+
+        if (!petSelect) {
+            return;
+        }
+
+
+        petSelect.innerHTML = `
+            <option value="">
+                Select a pet
+            </option>
+        `;
+
+
+        if (pets.length === 0) {
+
+            if (noPetsMessage) {
+                noPetsMessage.style.display =
+                    "block";
+            }
+
+            return;
+        }
+
+
+        if (noPetsMessage) {
+            noPetsMessage.style.display =
+                "none";
+        }
+
+
+        pets.forEach(pet => {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+
+            option.value =
+                String(pet.id);
+
+
+            option.textContent =
+                `${pet.name || "Unnamed Pet"}${
+                    pet.type
+                        ? " (" + pet.type + ")"
+                        : ""
+                }`;
+
+
+            petSelect.appendChild(
+                option
+            );
+
+        });
+
+
+        /*
+         * If a pet was selected previously,
+         * restore it.
+         */
+
+        const savedPetId =
+            localStorage.getItem(
+                "selectedPetId"
+            );
+
+
+        if (
+            savedPetId &&
+            pets.some(
+                pet =>
+                    String(pet.id) ===
+                    String(savedPetId)
+            )
+        ) {
+
+            petSelect.value =
+                String(savedPetId);
+        }
+
+    }
+
+
+    /* =========================================================
+       SET TODAY
+    ========================================================= */
+
+    function setToday() {
+
+        const dateInput =
+            document.getElementById(
+                "date"
+            );
+
+
+        if (!dateInput) {
+            return;
+        }
+
+
+        const today =
+            new Date()
+                .toISOString()
+                .split("T")[0];
+
+
+        dateInput.value =
+            today;
+    }
+
+
+    /* =========================================================
+       SHOW MESSAGE
+    ========================================================= */
+
+    function showMessage(
+        text,
+        type
+    ) {
+
+        const message =
+            document.getElementById(
+                "message"
+            );
+
+
+        if (!message) {
+            return;
+        }
+
+
+        message.textContent =
+            text;
+
+
+        message.className =
+            `message ${type}`;
+    }
+
+
+    /* =========================================================
+       SAVE VACCINATION
+    ========================================================= */
+
+    function saveVaccination(
+        event
+    ) {
+
+        event.preventDefault();
+
+
+        const petId =
+            document.getElementById(
+                "petId"
+            ).value;
+
+
+        const vaccine =
+            document.getElementById(
+                "vaccine"
+            ).value.trim();
+
+
+        const date =
+            document.getElementById(
+                "date"
+            ).value;
+
+
+        const nextDueDate =
+            document.getElementById(
+                "nextDueDate"
+            ).value;
+
+
+        const veterinarian =
+            document.getElementById(
+                "veterinarian"
+            ).value.trim();
+
+
+        const clinic =
+            document.getElementById(
+                "clinic"
+            ).value.trim();
+
+
+        const notes =
+            document.getElementById(
+                "notes"
+            ).value.trim();
+
+
+        /* VALIDATION */
+
+        if (!petId) {
+
+            showMessage(
+                "Please select a pet.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        if (!vaccine) {
+
+            showMessage(
+                "Please enter the vaccine name.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        if (!date) {
+
+            showMessage(
+                "Please select the vaccination date.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        /* GET PET */
+
+        const pets =
+            getStoredArray("pets");
+
+
+        const selectedPet =
+            pets.find(
+                pet =>
+                    String(pet.id) ===
+                    String(petId)
+            );
+
+
+        /* CREATE RECORD */
+
+        const vaccination = {
+
+            /*
+             * THIS ID IS IMPORTANT.
+             * It allows the dashboard
+             * Delete button to identify
+             * this exact record.
+             */
+            id: makeId(
+                "vaccination"
+            ),
+
+            petId: petId,
+
+            petName:
+                selectedPet
+                    ? selectedPet.name
+                    : "",
+
+            pet:
+                selectedPet
+                    ? selectedPet.name
+                    : "",
+
+            vaccine: vaccine,
+
+            date: date,
+
+            nextDueDate:
+                nextDueDate,
+
+            veterinarian:
+                veterinarian,
+
+            clinic:
+                clinic,
+
+            notes:
+                notes,
+
+            createdAt:
+                new Date().toISOString()
+        };
+
+
+        /* GET EXISTING */
+
+        const vaccinations =
+            getStoredArray(
+                "vaccinations"
+            );
+
+
+        /* ADD */
+
+        vaccinations.push(
+            vaccination
+        );
+
+
+        /* SAVE */
+
+        const saved =
+            saveStoredArray(
+                "vaccinations",
+                vaccinations
+            );
+
+
+        if (!saved) {
+
+            showMessage(
+                "Could not save the vaccination record.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        /*
+         * Remember selected pet.
+         */
+
+        localStorage.setItem(
+            "selectedPetId",
+            petId
+        );
+
+
+        showMessage(
+            "Vaccination saved successfully! Redirecting...",
+            "success"
+        );
+
+
+        /*
+         * Redirect to dashboard.
+         */
+
+        setTimeout(
+            function () {
+
+                window.location.href =
+                    "profile.html";
+
+            },
+            700
+        );
+    }
+
+
+    /* =========================================================
+       INITIALIZE
+    ========================================================= */
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        function () {
+
+            loadPets();
+
+            setToday();
+
+
+            const form =
+                document.getElementById(
+                    "vaccinationForm"
+                );
+
+
+            if (form) {
+
+                form.addEventListener(
+                    "submit",
+                    saveVaccination
+                );
+            }
+
+        }
+    );
+
+</script>
+
+</body>
+</html>
